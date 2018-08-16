@@ -30,7 +30,7 @@
 #include <cqlinalg/blas1.hpp>
 #include <cqlinalg/blasutil.hpp>
 #include <cqlinalg/matfunc.hpp>
-#include <pcm/impl.hpp>
+#include <pcm.hpp>
 
 // SCF definitions for SingleSlaterBase
 #include <singleslater/base/scf.hpp> 

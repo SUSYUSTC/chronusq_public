@@ -57,6 +57,8 @@ namespace ChronusQ
 		double* PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center);
 		double* formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset);
 		void storeFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset);
+		Eigen::VectorXd convert_double(Eigen::VectorXcd vec);
+		Eigen::VectorXd convert_double(Eigen::VectorXd vec);
 		//template<class MatsT>
 		//void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset);
 		void formcharge();

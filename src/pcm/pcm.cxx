@@ -145,11 +145,11 @@ namespace ChronusQ
 		EigenV*=2;
 		return EigenV.data();
 	}
-	Eigen::VectorXd convert_double(Eigen::VectorXd vec)
+	Eigen::VectorXd PCMBase::convert_double(Eigen::VectorXd vec)
 	{
 		return vec;
 	}
-	Eigen::VectorXd convert_double(Eigen::VectorXcd vec)
+	Eigen::VectorXd PCMBase::convert_double(Eigen::VectorXcd vec)
 	{
 		return vec.real();
 	}
