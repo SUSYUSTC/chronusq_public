@@ -47,7 +47,8 @@ namespace ChronusQ
 		size_t num_ele=nB;
 		int grid_size;
 		Eigen::Matrix3Xd grid;
-		Eigen::VectorXd surp;
+		Eigen::VectorXd nucp;//nuclear potential
+		Eigen::VectorXd surp;//surface potential
 		Eigen::VectorXd surc;//surface charge
 		Eigen::MatrixXd ints;
 		Eigen::MatrixXd pcmfock;
@@ -94,9 +95,7 @@ namespace ChronusQ
 				}
 				std::cout << "Potential calculated" << std::endl;
 			}
-			//FIXME:A weird factor
-			this->surp=convert_double(Potential)*8;
-			std::cout << "Times Potential by 8" << std::endl;
+			this->surp=this->convert_double(Potential).transpose()+this->nucp;
 		}
 		template<class MatsT>
 		void addFock(MatsT* fock)

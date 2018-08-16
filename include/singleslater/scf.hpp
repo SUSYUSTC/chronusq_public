@@ -224,15 +224,23 @@ namespace ChronusQ {
 	  //PCM
 	  if(pcm!=nullptr and this->pcm->use_PCM)
 	  {
+		  std::cout << std::setprecision(4);
 		  std::cout << "PCM iteration begins" << std::endl;
 		  std::cout << "formpotential starts" << std::endl;
 		  this->pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
+		  std::cout << "Total potential" << std::endl;
+		  std::cout << this->pcm->surp.transpose() << std::endl;
+		  std::cout << "Nuclear potential" << std::endl;
+		  std::cout << this->pcm->nucp.transpose() << std::endl;
 		  std::cout << "formcharge starts" << std::endl;
 		  this->pcm->formcharge();
+		  std::cout << "charge" << std::endl;
+		  std::cout << this->pcm->surc.transpose() << std::endl;
+		  std::cout << "total charge: " << this->pcm->surc.sum() << std::endl;
 		  std::cout << "formFock starts" << std::endl;
 		  this->pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
 		  std::cout << "addFock starts" << std::endl;
-		  std::cout << std::setprecision(4) << this->pcm->pcmfock << std::endl;
+		  std::cout << this->pcm->pcmfock << std::endl;
 		  this->pcm->addFock(this->fockMatrix[0]);
 		  std::cout << "PCM iteration ends" << std::endl;
 	  }

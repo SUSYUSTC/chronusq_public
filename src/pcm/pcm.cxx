@@ -45,6 +45,7 @@ namespace ChronusQ
 		os << "Is integrations calculated?\t" << pcmbase.is_stored << std::endl;
 		os << "Number of grids:\t" << pcmbase.grid_size << std::endl;
 		os << "Number of basis:\t" << pcmbase.nB << std::endl;
+		/*
 		if (pcmbase.grid.size()!=0 && pcmbase.surc.size()!=0)
 		{
 			os << "Coordinates of grids and surface charge:" << std::endl;
@@ -86,6 +87,7 @@ namespace ChronusQ
 		{
 			os << "Information of integrations will be calculated each step" << std::endl;
 		}
+		*/
 		return os;
 	}
 	PCMBase::PCMBase()
@@ -126,6 +128,7 @@ namespace ChronusQ
 		{
 			charges[i]=double(molecule.atoms[i].atomicNumber);
 		}
+		//Attention here: unit is Bohr
 		double* coordinates=new double[3*nAtoms];
 		for(int i=0;i!=nAtoms;++i)
 		{
@@ -137,27 +140,37 @@ namespace ChronusQ
 		this->grid_size= pcmsolver_get_cavity_size(this->pcm_context); 
 		this->grid = Eigen::Matrix3Xd(3,grid_size);
 		pcmsolver_get_centers(pcm_context, grid.data());
+		this->nucp=Eigen::VectorXd::Zero(this->grid_size,1);
+		Eigen::Map<Eigen::Matrix3Xd> coor(coordinates,3,nAtoms);
+		for(int i=0;i!=this->grid_size;++i)
+		{
+			for(int j=0;j!=nAtoms;++j)
+			{
+				Eigen::Vector3d vec=this->grid.col(i)-coor.col(j);
+				nucp(i)+=charges[j]/vec.norm();
+			}
+		}
 	}
 	double* PCMBase::PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center)
 	{
-		std::cout << "PointFock started, ";
+		//std::cout << "PointFock started, ";
 		Atom atom("H",center);
 		atom.atomicNumber=1;
 		std::vector<Atom> atoms(1);
 		atoms[0]=atom;
 		Molecule molecule(0,2,atoms);
-		std::cout << "Molecule created, ";
+		//std::cout << "Molecule created, ";
 		std::array<double,3> magAmp = perb.getDipoleAmp(Magnetic);
 		std::vector<double*> Potential;
 		AOIntegrals<double> aoints(mem, molecule, basisset);
-		std::cout << "AOIntegrals created, ";
+		//std::cout << "AOIntegrals created, ";
 		Potential = aoints.OneEDriverLibint(libint2::Operator::nuclear,basisset.shells);
-		std::cout << "Potential calculated, ";
+		//std::cout << "Potential calculated, ";
 		double* V=reinterpret_cast<double*>(Potential[0]);
 		//this is because the structure of DM
 		Eigen::Map<Eigen::VectorXd> EigenV(V,this->num_ele);
-		EigenV*=2;
-		std::cout << "Times Potential by 2";
+		//EigenV*=2;
+		//std::cout << "Times Potential by 2";
 		return EigenV.data();
 	}
 	Eigen::RowVectorXd PCMBase::convert_double(Eigen::RowVectorXd vec)
