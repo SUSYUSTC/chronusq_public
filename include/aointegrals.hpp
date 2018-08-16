@@ -191,9 +191,7 @@ namespace ChronusQ {
 
     // General wrapper for 1-e integrals
     // See src/aointegrals/aointegrals_onee_drivers.cxx for documentation
-    std::vector<IntsT*> OneEDriverLibint(libint2::Operator,std::vector<libint2::Shell>&);
 
-    // 1-e builders for in-house integral code
     template <size_t NOPER, bool SYMM, typename F>
     std::vector<IntsT*> OneEDriverLocal(const F&,std::vector<libint2::Shell>&);
     template <size_t NOPER, bool SYMM, typename F>
@@ -202,6 +200,8 @@ namespace ChronusQ {
     std::vector<IntsT*> OneEDriverLocalGIAO(const F&,std::vector<libint2::Shell>&);
 
     public:
+    // 1-e builders for in-house integral code
+    std::vector<IntsT*> OneEDriverLibint(libint2::Operator,std::vector<libint2::Shell>&);
 
     double* schwartz = nullptr; ///< Schwartz bounds for the ERIs
 

@@ -20,22 +20,9 @@
 # Contact the Developers:
 #   E-Mail: xsli@uw.edu
 #
-add_subdirectory(cqlinalg)
-add_subdirectory(grid)
-add_subdirectory(molecule)
-add_subdirectory(basisset)
-add_subdirectory(aointegrals)
-add_subdirectory(quantum)
-add_subdirectory(wavefunction)
-add_subdirectory(singleslater)
-add_subdirectory(realtime)
-add_subdirectory(itersolver)
-add_subdirectory(response)
-add_subdirectory(pcm)
+add_library(pcm STATIC pcm.cxx)
 
-
-
-list(REVERSE CQEX_LINK)
-add_subdirectory(cxxapi)
-
+# Append pcm to executable link
+list(APPEND CQEX_LINK pcm)
 set(CQEX_LINK ${CQEX_LINK} PARENT_SCOPE)
+

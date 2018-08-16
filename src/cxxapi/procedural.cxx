@@ -47,7 +47,7 @@
 #include <cqlinalg/eig.hpp>
 
 #include <physcon.hpp>
-
+#include <pcm.hpp>
 
 //#include <cubegen.hpp>
 
@@ -151,6 +151,15 @@ namespace ChronusQ {
 
     CQSCFOptions(output,input,*ss,emPert);
        
+	/*
+	PCMBase pcm(input,basis);
+	pcm.initialize(mol);
+	if (pcm.store)
+	{
+		pcm.storeFock(memManager,emPert,basis);
+		std::cout << pcm;
+	}
+	*/
 
 
     bool rstExists = false;
