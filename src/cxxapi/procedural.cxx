@@ -48,6 +48,8 @@
 
 #include <physcon.hpp>
 #include <pcm.hpp>
+#include <iomanip>
+#include <singleslater/base/initpcm.hpp>
 
 //#include <cubegen.hpp>
 
@@ -151,15 +153,15 @@ namespace ChronusQ {
 
     CQSCFOptions(output,input,*ss,emPert);
        
-	/*
 	PCMBase pcm(input,basis);
 	pcm.initialize(mol);
-	if (pcm.store)
+	if (pcm.use_PCM and pcm.store)
 	{
-		pcm.storeFock(memManager,emPert,basis);
+		pcm.storeFock(*memManager,emPert,basis);
+		std::cout << std::setw(13) << std::setfill(' ') << std::setprecision(5);
 		std::cout << pcm;
 	}
-	*/
+	ss->initpcm(&pcm);
 
 
     bool rstExists = false;

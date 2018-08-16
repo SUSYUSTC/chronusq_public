@@ -110,6 +110,8 @@ message( "ChronusQ Dependencies" )
 include(FindLibint)
 include(FindLibXC)
 include(Boost)
+include(cnpy)
+include(pcm)
 
 set(CQEX_LINK ${CQ_EXT_LINK} )
 

@@ -30,6 +30,7 @@
 
 #include <fields.hpp>
 #include <util/files.hpp>
+#include <pcm.hpp>
 
 namespace ChronusQ {
 
@@ -171,6 +172,8 @@ namespace ChronusQ {
     // SCF Variables
     SCFControls    scfControls; ///< Controls for the SCF procedure
     SCFConvergence scfConv;     ///< Current status of SCF convergence
+	//PCM
+	PCMBase* pcm=NULL;
 
     // Constructors (all defaulted)
     SingleSlaterBase(const SingleSlaterBase &) = default;
@@ -249,6 +252,7 @@ namespace ChronusQ {
       
     // Perform an SCF procedure (see include/singleslater/scf.hpp for docs)
     void SCF(EMPerturbation &);
+	void initpcm(PCMBase*);
 
   }; // class SingleSlaterBase
 

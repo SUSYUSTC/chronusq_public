@@ -30,6 +30,7 @@
 #include <cqlinalg/blas1.hpp>
 #include <cqlinalg/blasutil.hpp>
 #include <cqlinalg/matfunc.hpp>
+#include <pcm/impl.hpp>
 
 // SCF definitions for SingleSlaterBase
 #include <singleslater/base/scf.hpp> 
@@ -220,6 +221,14 @@ namespace ChronusQ {
       formFock(pert,increment);
       //if( MPIRank(comm) == 0 )
       //  printFockTimings(std::cout);
+	  //PCM
+	  if(this->pcm->use_PCM)
+	  {
+		  pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
+		  pcm->formcharge();
+		  double *pcmfock=pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
+		  this->onePDM[0]=pcm->addFock(pcmfock,this->onePDM[0]);
+	  }
     }
 
     if( scfControls.scfAlg == _NEWTON_RAPHSON_SCF and scfConv.nSCFIter > 0 )
