@@ -222,12 +222,19 @@ namespace ChronusQ {
       //if( MPIRank(comm) == 0 )
       //  printFockTimings(std::cout);
 	  //PCM
-	  if(this->pcm->use_PCM)
+	  if(pcm!=nullptr and this->pcm->use_PCM)
 	  {
-		  pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
-		  pcm->formcharge();
-		  double *pcmfock=pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
-		  this->onePDM[0]=pcm->addFock(pcmfock,this->onePDM[0]);
+		  std::cout << "PCM iteration begins" << std::endl;
+		  std::cout << "formpotential starts" << std::endl;
+		  this->pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
+		  std::cout << "formcharge starts" << std::endl;
+		  this->pcm->formcharge();
+		  std::cout << "formFock starts" << std::endl;
+		  this->pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
+		  std::cout << "addFock starts" << std::endl;
+		  std::cout << std::setprecision(4) << this->pcm->pcmfock << std::endl;
+		  this->pcm->addFock(this->fockMatrix[0]);
+		  std::cout << "PCM iteration ends" << std::endl;
 	  }
     }
 

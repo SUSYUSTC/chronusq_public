@@ -1,7 +1,8 @@
 #include <singleslater.hpp>
+#include <iostream>
 namespace ChronusQ
 {
-	void SingleSlaterBase::initpcm(PCMBase* pcmbase)
+	void SingleSlaterBase::initpcm(std::shared_ptr<PCMBase> pcmbase)
 	{
 		this->pcm=pcmbase;
 	}

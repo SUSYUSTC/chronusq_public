@@ -153,16 +153,6 @@ namespace ChronusQ {
 
     CQSCFOptions(output,input,*ss,emPert);
        
-	PCMBase pcm(input,basis);
-	pcm.initialize(mol);
-	if (pcm.use_PCM and pcm.store)
-	{
-		pcm.storeFock(*memManager,emPert,basis);
-		std::cout << std::setw(13) << std::setfill(' ') << std::setprecision(5);
-		std::cout << pcm;
-	}
-	ss->initpcm(&pcm);
-
 
     bool rstExists = false;
     if( ss->scfControls.guess == READMO or 
@@ -191,6 +181,16 @@ namespace ChronusQ {
       if(aoints->contrAlg == INCORE) aoints->computeERI(emPert);
 
       ss->formGuess();
+	  std::shared_ptr<PCMBase> pcm=std::make_shared<PCMBase>(input,basis);
+	  pcm->initialize(mol);
+	  if (pcm->use_PCM and pcm->store)
+	  {
+		  pcm->storeFock(*memManager,emPert,basis);
+		  std::cout << std::setw(13) << std::setfill(' ') << std::setprecision(5);
+		  std::cout << *pcm;
+	  }
+	  ss->initpcm(pcm);
+
       ss->SCF(emPert);
     }
 

@@ -173,7 +173,7 @@ namespace ChronusQ {
     SCFControls    scfControls; ///< Controls for the SCF procedure
     SCFConvergence scfConv;     ///< Current status of SCF convergence
 	//PCM
-	PCMBase* pcm=NULL;
+	std::shared_ptr<PCMBase> pcm=nullptr;
 
     // Constructors (all defaulted)
     SingleSlaterBase(const SingleSlaterBase &) = default;
@@ -252,7 +252,7 @@ namespace ChronusQ {
       
     // Perform an SCF procedure (see include/singleslater/scf.hpp for docs)
     void SCF(EMPerturbation &);
-	void initpcm(PCMBase*);
+	void initpcm(std::shared_ptr<PCMBase>);
 
   }; // class SingleSlaterBase
 
