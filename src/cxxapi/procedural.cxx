@@ -73,7 +73,7 @@ namespace ChronusQ {
     if( outFileName.compare("STDOUT") and (rank == 0) ) {
 
       outfile = std::make_shared<std::ofstream>(outFileName);
-      std::cout.rdbuf(outfile->rdbuf());
+      //std::cout.rdbuf(outfile->rdbuf());
 
     }
 
@@ -89,7 +89,7 @@ namespace ChronusQ {
         std::to_string(rank);
 
       rankfile = std::make_shared<std::ofstream>(rankFileName);
-      std::cerr.rdbuf(rankfile->rdbuf());
+      //std::cerr.rdbuf(rankfile->rdbuf());
 
       std::cerr << "Hello from RANK = " << rank << " / SIZE = " << size 
                 << "\n\n";
@@ -181,13 +181,14 @@ namespace ChronusQ {
       if(aoints->contrAlg == INCORE) aoints->computeERI(emPert);
 
       ss->formGuess();
+	  std::cout << "PCM Initialization starts" << std::endl;
 	  std::shared_ptr<PCMBase> pcm=std::make_shared<PCMBase>(input,basis);
 	  pcm->initialize(mol);
 	  if (pcm->use_PCM and pcm->store)
 	  {
+		  std::cout << *pcm;
 		  pcm->storeFock(*memManager,emPert,basis);
 		  std::cout << std::setw(13) << std::setfill(' ') << std::setprecision(5);
-		  std::cout << *pcm;
 	  }
 	  ss->initpcm(pcm);
 

@@ -87,7 +87,8 @@ namespace ChronusQ
 				std::cout << "No store detected" << std::endl;
 				for(int i=0;i!=this->grid_size;++i)
 				{
-					std::cout << " Step " << i;
+					if(i%50==0)
+						std::cout << "Step " << i;
 					std::array<double,3> center={grid(0,i),grid(1,i),grid(2,i)};
 					double* new_ints=PointFock(mem, perb,basisset,center);
 					Eigen::Map<Eigen::VectorXd> V(new_ints,num_ele);
