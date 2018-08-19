@@ -50,11 +50,11 @@ namespace ChronusQ
 		Eigen::VectorXd nucp;//nuclear potential
 		Eigen::VectorXd surp;//surface potential
 		Eigen::VectorXd surc;//surface charge
-		Eigen::MatrixXd ints;
+		double* ints;
 		Eigen::MatrixXd pcmfock;
 		PCMBase();
 		PCMBase(CQInputFile& input, BasisSet& basisset);
-		void initialize(const Molecule& molecule);
+		void initialize(CQMemManager& mem,const Molecule& molecule);
 		friend std::ostream& operator<< (std::ostream& os, const PCMBase pcmbase);
 		double* PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center);
 		void formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset);
@@ -67,46 +67,9 @@ namespace ChronusQ
 		//template<class MatsT>
 		//MatsT* addFock(double* fock1, MatsT* fock2);
 		template<class MatsT>
-		void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)
-		{
-			//FIXME: memory leak
-			Eigen::Matrix<MatsT,1,-1> Potential(1,this->grid_size);
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> Matrix_PDM(PDM,this->nB,this->nB);
-			Eigen::Matrix<MatsT,-1,-1> PDM_tran=Matrix_PDM.transpose();
-			Eigen::Map<Eigen::Matrix<MatsT,1,-1>> DM(PDM_tran.data(),1,this->num_ele);
-			std::cout << "Matrices created" << std::endl;
-			if (this->store)
-			{
-				std::cout << "Store detected" << std::endl;
-				assert(this->is_stored);
-				Potential=DM*this->ints;
-				std::cout << "Potential calculated" << std::endl;
-			}
-			else
-			{
-				std::cout << "No store detected" << std::endl;
-				for(int i=0;i!=this->grid_size;++i)
-				{
-					if(i%50==0)
-						std::cout << "Step " << i;
-					std::array<double,3> center={grid(0,i),grid(1,i),grid(2,i)};
-					double* new_ints=PointFock(mem, perb,basisset,center);
-					Eigen::Map<Eigen::VectorXd> V(new_ints,num_ele);
-					Potential(i)=DM*V;
-				}
-				std::cout << "Potential calculated" << std::endl;
-			}
-			this->surp=this->convert_double(Potential).transpose()+this->nucp;
-		}
+		void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset);
 		template<class MatsT>
-		void addFock(MatsT* fock)
-		{
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> Fock(fock,this->nB,this->nB);
-			std::cout << "Matrices created" << std::endl;
-			Eigen::Matrix<MatsT,-1,-1> NewFock=this->pcmfock+Fock;
-			std::cout << "Addition finished" << std::endl;
-			fock=NewFock.data();;
-		}
+		void addFock(MatsT* fock);
 	};
 }
 

@@ -183,7 +183,10 @@ namespace ChronusQ {
       ss->formGuess();
 	  std::cout << "PCM Initialization starts" << std::endl;
 	  std::shared_ptr<PCMBase> pcm=std::make_shared<PCMBase>(input,basis);
-	  pcm->initialize(mol);
+	  if (pcm->use_PCM)
+	  {
+		  pcm->initialize(*memManager, mol);
+	  }
 	  if (pcm->use_PCM and pcm->store)
 	  {
 		  std::cout << *pcm;
