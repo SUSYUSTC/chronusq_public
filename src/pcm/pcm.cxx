@@ -102,11 +102,14 @@ namespace ChronusQ
 			std::string solver_type=input.getData<std::string>("PCM.SOLVER_TYPE");
 			std::string solvent=input.getData<std::string>("PCM.SOLVENT");
 			this->store=input.getData<bool>("PCM.STORE");
+			this->host_input.outside_epsilon=input.getData<double>("PCM.EPSILON");
 			this->host_input.area=area;
 			std::strcpy(this->host_input.solver_type,solver_type.c_str());
 			std::strcpy(this->host_input.solvent,solvent.c_str());
 			std::strcpy(this->host_input.cavity_type, "Gepol");
-			std::strcpy(this->host_input.radii_set, "Bondi");
+			std::strcpy(this->host_input.radii_set, "UFF");
+			std::strcpy(this->host_input.inside_type, "Vacuum");
+			std::strcpy(this->host_input.outside_type, "UniformDielectric");
 			this->nB=basisset.nBasis;
 			this->num_ele=nB*nB;
 			this->host_input.scaling=true;
@@ -222,8 +225,6 @@ namespace ChronusQ
 			std::cout << "Store detected" << std::endl;
 			assert(this->is_stored);
 			sum_Fock=matints*this->surc;
-			matpcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
-			std::cout << "Fock calculated" << std::endl;
 		}
 		else
 		{
@@ -237,10 +238,10 @@ namespace ChronusQ
 				Eigen::Map<Eigen::VectorXd> V(new_ints,num_ele);
 				sum_Fock+=V;
 			}
-			matpcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
-			std::cout << "Fock calculated" << std::endl;
 		}
-
+		sum_Fock*=2;
+		matpcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
+		std::cout << "Fock calculated" << std::endl;
 	}
 	template<class MatsT>
 	void PCMBase::formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)
@@ -283,11 +284,15 @@ namespace ChronusQ
 		Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> Fock(fock,this->nB,this->nB);
 		Eigen::Map<Eigen::MatrixXd> matpcmfock(this->pcmfock,this->nB,this->nB);
 		std::cout << "Matrices created" << std::endl;
-		Eigen::Matrix<MatsT,-1,-1> NewFock=matpcmfock+Fock;
+		Fock=matpcmfock+Fock;
 		std::cout << "Addition finished" << std::endl;
-		fock=NewFock.data();
 	}
 	template void PCMBase::addFock(dcomplex* fock);
 	template void PCMBase::addFock(double* fock);
+	double PCMBase::computeEnergy()
+	{
+		double energy=this->surp.transpose().dot(this->surc)/2;
+		return energy;
+	}
 }
 

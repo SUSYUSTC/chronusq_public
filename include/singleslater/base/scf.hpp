@@ -86,6 +86,8 @@ namespace ChronusQ {
 
     // Compute initial properties
     this->computeProperties(pert);
+	if(this->pcm!=nullptr and this->pcm->use_PCM)
+		this->totalEnergy+=this->pcm->computeEnergy();
 
     //printSCFFooter(isConverged);
     if(not isConverged)

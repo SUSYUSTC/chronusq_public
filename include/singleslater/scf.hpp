@@ -31,6 +31,8 @@
 #include <cqlinalg/blasutil.hpp>
 #include <cqlinalg/matfunc.hpp>
 #include <pcm.hpp>
+#include <cnpy.h>
+#include <vector>
 
 // SCF definitions for SingleSlaterBase
 #include <singleslater/base/scf.hpp> 
@@ -245,11 +247,25 @@ namespace ChronusQ {
 		  std::cout << "formFock starts" << std::endl;
 		  this->pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
 		  std::cout << "addFock starts" << std::endl;
-		  //std::cout << this->pcm->pcmfock << std::endl;
 		  this->pcm->addFock(this->fockMatrix[0]);
 		  std::cout << "PCM iteration ends" << std::endl;
 		  current=clock();
 		  std::cout << "End time: " << (current-begin)/1000 << std::endl;
+		  //std::cout << Eigen::Map<Eigen::MatrixXd>(this->pcm->pcmfock,this->pcm->nB,this->pcm->nB) << std::endl;
+		  std::vector<size_t> npy_size={this->pcm->nB,this->pcm->nB};
+		  for(int i=0;i!=this->fockMatrix.size();++i)
+		  {
+			  //std::cout << "The " << i << "th component of Fock" << std::endl;
+			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->fockMatrix[i],this->pcm->nB,this->pcm->nB) << std::endl;
+			  cnpy::npy_save("Fock"+std::to_string(i)+".npy",this->fockMatrix[i],npy_size,"w");
+		  }
+		  for(int i=0;i!=this->onePDM.size();++i)
+		  {
+			  //std::cout << "The " << i << "th component of Density Matrix" << std::endl;
+			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->onePDM[i],this->pcm->nB,this->pcm->nB) << std::endl;
+			  cnpy::npy_save("DM"+std::to_string(i)+".npy",this->onePDM[i],npy_size,"w");
+		  }
+		  cnpy::npy_save("pcmFock.npy",this->pcm->pcmfock,npy_size,"w");
 	  }
     }
 

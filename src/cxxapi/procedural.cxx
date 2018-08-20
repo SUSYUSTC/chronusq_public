@@ -50,6 +50,7 @@
 #include <pcm.hpp>
 #include <iomanip>
 #include <singleslater/base/initpcm.hpp>
+#include <cnpy.h>
 
 //#include <cubegen.hpp>
 
@@ -197,6 +198,7 @@ namespace ChronusQ {
 
       ss->SCF(emPert);
     }
+
 
 
     if( not jobType.compare("RT") ) {

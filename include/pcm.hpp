@@ -70,6 +70,7 @@ namespace ChronusQ
 		void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset);
 		template<class MatsT>
 		void addFock(MatsT* fock);
+		double computeEnergy();
 	};
 }
 
