@@ -149,6 +149,7 @@ namespace ChronusQ
 				nucp(i)+=charges[j]/vec.norm();
 			}
 		}
+		this->pcmfock=mem.malloc<double>(this->nB*this->nB);
 		mem.free(charges);
 		mem.free(coordinates);
 	}
@@ -214,12 +215,14 @@ namespace ChronusQ
 	void PCMBase::formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset)
 	{
 		Eigen::VectorXd sum_Fock(this->num_ele);
+		Eigen::Map<Eigen::MatrixXd> matints(this->ints,this->num_ele,this->grid_size);
+		Eigen::Map<Eigen::MatrixXd> matpcmfock(this->pcmfock,this->nB,this->nB);
 		if(this->store)
 		{
 			std::cout << "Store detected" << std::endl;
 			assert(this->is_stored);
-			sum_Fock=this->ints*this->surc;
-			this->pcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
+			sum_Fock=matints*this->surc;
+			matpcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
 			std::cout << "Fock calculated" << std::endl;
 		}
 		else
@@ -234,7 +237,7 @@ namespace ChronusQ
 				Eigen::Map<Eigen::VectorXd> V(new_ints,num_ele);
 				sum_Fock+=V;
 			}
-			this->pcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
+			matpcmfock=Eigen::Map<Eigen::MatrixXd>(sum_Fock.data(),this->nB,this->nB);
 			std::cout << "Fock calculated" << std::endl;
 		}
 
@@ -247,12 +250,13 @@ namespace ChronusQ
 		Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> Matrix_PDM(PDM,this->nB,this->nB);
 		Eigen::Matrix<MatsT,-1,-1> PDM_tran=Matrix_PDM.transpose();
 		Eigen::Map<Eigen::Matrix<MatsT,1,-1>> DM(PDM_tran.data(),1,this->num_ele);
+		Eigen::Map<Eigen::MatrixXd> matints(this->ints,this->num_ele,this->grid_size);
 		std::cout << "Matrices created" << std::endl;
 		if (this->store)
 		{
 			std::cout << "Store detected" << std::endl;
 			assert(this->is_stored);
-			Potential=DM*this->ints;
+			Potential=DM*matints;
 			std::cout << "Potential calculated" << std::endl;
 		}
 		else
@@ -277,10 +281,11 @@ namespace ChronusQ
 	void PCMBase::addFock(MatsT* fock)
 	{
 		Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> Fock(fock,this->nB,this->nB);
+		Eigen::Map<Eigen::MatrixXd> matpcmfock(this->pcmfock,this->nB,this->nB);
 		std::cout << "Matrices created" << std::endl;
-		Eigen::Matrix<MatsT,-1,-1> NewFock=this->pcmfock+Fock;
+		Eigen::Matrix<MatsT,-1,-1> NewFock=matpcmfock+Fock;
 		std::cout << "Addition finished" << std::endl;
-		fock=NewFock.data();;
+		fock=NewFock.data();
 	}
 	template void PCMBase::addFock(dcomplex* fock);
 	template void PCMBase::addFock(double* fock);

@@ -51,7 +51,7 @@ namespace ChronusQ
 		Eigen::VectorXd surp;//surface potential
 		Eigen::VectorXd surc;//surface charge
 		double* ints;
-		Eigen::MatrixXd pcmfock;
+		double* pcmfock;
 		PCMBase();
 		PCMBase(CQInputFile& input, BasisSet& basisset);
 		void initialize(CQMemManager& mem,const Molecule& molecule);
