@@ -87,7 +87,11 @@ namespace ChronusQ {
     // Compute initial properties
     this->computeProperties(pert);
 	if(this->pcm!=nullptr and this->pcm->use_PCM)
+	{
+		std::cout << "Nuclear: " << this->pcm->nucp.dot(this->pcm->surc);
+		std::cout << "Surface: " << this->pcm->surp.dot(this->pcm->surc);
 		this->totalEnergy+=this->pcm->computeEnergy();
+	}
 
     //printSCFFooter(isConverged);
     if(not isConverged)
