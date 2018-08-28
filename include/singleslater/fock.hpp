@@ -101,41 +101,43 @@ namespace ChronusQ {
 
     }
 	  //PCM
+	  std::vector<size_t> npy_size={NB,NB};
 	  if(this->pcm!=nullptr and this->pcm->use_PCM)
 	  {
+		  static int times=0;
 		  std::cout << std::setprecision(4);
-		  std::cout << "PCM iteration begins" << std::endl;
-		  std::cout << "formpotential starts" << std::endl;
+		  //std::cout << "PCM iteration begins" << std::endl;
+		  //std::cout << "formpotential starts" << std::endl;
 		  this->pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
 		  //std::cout << "Total potential" << std::endl;
 		  //std::cout << this->pcm->surp.transpose() << std::endl;
 		  //std::cout << "Nuclear potential" << std::endl;
 		  //std::cout << this->pcm->nucp.transpose() << std::endl;
-		  std::cout << "formcharge starts" << std::endl;
+		  //std::cout << "formcharge starts" << std::endl;
 		  this->pcm->formcharge();
 		  //std::cout << "charge" << std::endl;
 		  //std::cout << this->pcm->surc.transpose() << std::endl;
 		  std::cout << "total charge: " << this->pcm->surc.sum() << std::endl;
-		  std::cout << "formFock starts" << std::endl;
+		  //std::cout << "formFock starts" << std::endl;
 		  this->pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
-		  std::cout << "addFock starts" << std::endl;
+		  //std::cout << "addFock starts" << std::endl;
 		  this->pcm->addFock(this->fockMatrix[0]);
-		  std::cout << "PCM iteration ends" << std::endl;
+		  //std::cout << "PCM iteration ends" << std::endl;
 		  //std::cout << Eigen::Map<Eigen::MatrixXd>(this->pcm->pcmfock,this->pcm->nB,this->pcm->nB) << std::endl;
-		  std::vector<size_t> npy_size={this->pcm->nB,this->pcm->nB};
-		  for(int i=0;i!=this->fockMatrix.size();++i)
-		  {
-			  //std::cout << "The " << i << "th component of Fock" << std::endl;
-			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->fockMatrix[i],this->pcm->nB,this->pcm->nB) << std::endl;
-			  cnpy::npy_save("Fock"+std::to_string(i)+".npy",this->fockMatrix[i],npy_size,"w");
-		  }
-		  for(int i=0;i!=this->onePDM.size();++i)
-		  {
-			  //std::cout << "The " << i << "th component of Density Matrix" << std::endl;
-			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->onePDM[i],this->pcm->nB,this->pcm->nB) << std::endl;
-			  cnpy::npy_save("DM"+std::to_string(i)+".npy",this->onePDM[i],npy_size,"w");
-		  }
-		  cnpy::npy_save("pcmFock.npy",this->pcm->pcmfock,npy_size,"w");
+		  cnpy::npy_save("pcmFock"+std::to_string(times)+".npy",this->pcm->pcmfock,npy_size,"w");
+		  times+=1;
+	  }
+	  for(int i=0;i!=this->fockMatrix.size();++i)
+	  {
+		  //std::cout << "The " << i << "th component of Fock" << std::endl;
+		  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->fockMatrix[i],this->pcm->nB,this->pcm->nB) << std::endl;
+		  cnpy::npy_save("Fock"+std::to_string(i)+".npy",this->fockMatrix[i],npy_size,"w");
+	  }
+	  for(int i=0;i!=this->onePDM.size();++i)
+	  {
+		  //std::cout << "The " << i << "th component of Density Matrix" << std::endl;
+		  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->onePDM[i],this->pcm->nB,this->pcm->nB) << std::endl;
+		  cnpy::npy_save("DM"+std::to_string(i)+".npy",this->onePDM[i],npy_size,"w");
 	  }
 
   

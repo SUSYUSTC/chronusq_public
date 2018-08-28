@@ -292,6 +292,7 @@ PCMSolver_API void pcmsolver_load_surface_function(pcmsolver_context_t * context
  *  \param[in, out] context the PCM context object
  */
 PCMSolver_API void pcmsolver_write_timings(pcmsolver_context_t * context);
+PCMSolver_API double* pcmsolver_getmatrix(pcmsolver_context_t * context, int irrep);
 
 #ifdef __cplusplus
 }

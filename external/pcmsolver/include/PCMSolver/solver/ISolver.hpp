@@ -75,6 +75,7 @@ public:
   friend std::ostream & operator<<(std::ostream & os, ISolver & solver) {
     return solver.printSolver(os);
   }
+  virtual Eigen::MatrixXd getmatrix(int irrep) const = 0;
 
 protected:
   /*! Whether the system matrix has been built */

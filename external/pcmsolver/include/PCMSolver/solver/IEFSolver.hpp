@@ -30,6 +30,7 @@
 #include "Config.hpp"
 
 #include <Eigen/Core>
+#include <Eigen/Dense>
 
 /*! \file IEFSolver.hpp */
 
@@ -97,6 +98,7 @@ public:
                             const IGreensFunction & gf_i,
                             const IGreensFunction & gf_o,
                             const IBoundaryIntegralOperator & op);
+  Eigen::MatrixXd getmatrix(int irrps) const;
 
 private:
   /*! Whether the system matrix has to be symmetrized */
@@ -105,6 +107,8 @@ private:
   Eigen::MatrixXd Tepsilon_;
   /*! T(epsilon) matrix, symmetry blocked form */
   std::vector<Eigen::MatrixXd> blockTepsilon_;
+  std::vector<Eigen::PartialPivLU<Eigen::MatrixXd>> blockTepsilon_LU;
+  std::vector<Eigen::PartialPivLU<Eigen::MatrixXd>> blockTepsilon_LU_adjoint;
   /*! R_infinity matrix, not symmetry blocked */
   Eigen::MatrixXd Rinfinity_;
   /*! R_infinity matrix, symmetry blocked form */

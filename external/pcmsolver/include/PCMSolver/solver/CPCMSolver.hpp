@@ -64,6 +64,7 @@ public:
    */
   CPCMSolver(bool symm, double corr)
       : ISolver(), hermitivitize_(symm), correction_(corr) {}
+  Eigen::MatrixXd getmatrix(int irrps) const;
 
 private:
   /*! Whether the system matrix has to be symmetrized */

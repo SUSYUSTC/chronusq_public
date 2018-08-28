@@ -250,6 +250,9 @@ public:
   /*! \brief Writes timing results for the API
    */
   void writeTimings() const;
+  double* getmatrix(int irrep);
+  //Eigen::Matrix pcmsolver_getmatrix(pcmsolver_context_t * context, int irrep){
+
 
 private:
   typedef std::map<std::string, Eigen::VectorXd> SurfaceFunctionMap;
