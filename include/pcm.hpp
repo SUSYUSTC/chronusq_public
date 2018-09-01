@@ -39,12 +39,16 @@ namespace ChronusQ
 	{
 	public:
 		bool use_PCM=false;
-		bool store;//whether to store the matrix
-		bool is_stored;
+		bool store=false;//whether to store the matrix
+		bool is_stored=false;
+		std::string int_path;
 		PCMInput host_input;
 		pcmsolver_context_t* pcm_context;
 		size_t nB;
 		size_t num_ele=nB;
+		bool start_save=false;
+		size_t times=0;
+		size_t savestep=100;
 		int grid_size;
 		Eigen::Matrix3Xd grid;
 		Eigen::VectorXd nucp;//nuclear potential

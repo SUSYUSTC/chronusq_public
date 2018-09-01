@@ -301,7 +301,6 @@ ChronusQ	/mnt/HD/software/chronusq_public/src/grid/gausslegendre.cxx	/^namespace
 ChronusQ	/mnt/HD/software/chronusq_public/src/grid/lebedev.cxx	/^namespace ChronusQ {$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/itersolver/impl.cxx	/^namespace ChronusQ {$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/molecule/molecule.cxx	/^namespace ChronusQ {$/;"	n	file:
-ChronusQ	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^namespace ChronusQ$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^namespace ChronusQ$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/quantum/impl.cxx	/^namespace ChronusQ {$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/realtime/fields.cxx	/^namespace ChronusQ {$/;"	n	file:
@@ -309,6 +308,7 @@ ChronusQ	/mnt/HD/software/chronusq_public/src/realtime/impl.cxx	/^namespace Chro
 ChronusQ	/mnt/HD/software/chronusq_public/src/response/impl.cxx	/^namespace ChronusQ {$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/singleslater/fock.cxx	/^namespace ChronusQ {$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/singleslater/impl.cxx	/^namespace ChronusQ {$/;"	n	file:
+ChronusQ	/mnt/HD/software/chronusq_public/src/singleslater/sjc.cxx	/^namespace ChronusQ$/;"	n	file:
 ChronusQ	/mnt/HD/software/chronusq_public/src/wavefunction/impl.cxx	/^namespace ChronusQ {$/;"	n	file:
 Combine	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^class Combine(TokenConverter):$/;"	c
 Command	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^class Command(Argument):$/;"	c
@@ -723,8 +723,6 @@ PBEC	/mnt/HD/software/chronusq_public/include/dft.hpp	/^  class PBEC : public GG
 PBEX	/mnt/HD/software/chronusq_public/include/dft.hpp	/^    PBEX() : GGA(XC_GGA_X_PBE) { }$/;"	f	class:ChronusQ::PBEX
 PBEX	/mnt/HD/software/chronusq_public/include/dft.hpp	/^  class PBEX : public GGA {$/;"	c	namespace:ChronusQ
 PCMBase	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^	class PCMBase$/;"	c	namespace:ChronusQ
-PCMBase	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	PCMBase::PCMBase()$/;"	f	class:ChronusQ::PCMBase
-PCMBase	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	PCMBase::PCMBase(CQInputFile& input, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 PCMBase	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	PCMBase::PCMBase()$/;"	f	class:ChronusQ::PCMBase
 PCMBase	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	PCMBase::PCMBase(CQInputFile& input, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 PCMInput	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/PCMInput.h	/^typedef struct PCMInput {$/;"	s
@@ -791,7 +789,6 @@ ParticleParticleTDA	/mnt/HD/software/chronusq_public/include/response/enums.hpp	
 Pattern	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^class Pattern(object):$/;"	c
 PlanckConst	/mnt/HD/software/chronusq_public/include/physcon.hpp	/^  constexpr double PlanckConst   = 6.62606957e-34;$/;"	m	namespace:ChronusQ
 Pn	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Legendre.hpp	/^template <typename T> inline T Pn(unsigned int n, const T & x) {$/;"	f	namespace:Legendre
-PointFock	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	double* PCMBase::PointFock(std::shared_ptr<CQMemManager> mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center)$/;"	f	class:ChronusQ::PCMBase
 PointFock	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	double* PCMBase::PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center)$/;"	f	class:ChronusQ::PCMBase
 PolarizationPropagator	/mnt/HD/software/chronusq_public/include/response/polarization.hpp	/^      PolarizationPropagator( MPI_Comm c, ResponseType job, $/;"	f	class:ChronusQ::PolarizationPropagator
 PolarizationPropagator	/mnt/HD/software/chronusq_public/include/response/polarization.hpp	/^      PolarizationPropagator( const PolarizationPropagator &other ) : $/;"	f	class:ChronusQ::PolarizationPropagator
@@ -1462,15 +1459,15 @@ __str__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver
 __sub__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def __sub__(self, other):$/;"	m	class:ParserElement	file:
 __versionTime__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^__versionTime__ = "16 Aug 2014 00:12"$/;"	v
 __version__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^__version__ = '0.6.2'$/;"	v
-__version__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version__ = '1.2.1'$/;"	v
+__version__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version__ = 'undefined'$/;"	v
 __version__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^__version__ = "2.0.3"$/;"	v
-__version_branch_name	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_branch_name = ''$/;"	v
-__version_cmake	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_cmake = '1.2.1.0'$/;"	v
-__version_is_clean	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_is_clean = 'True'$/;"	v
+__version_branch_name	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_branch_name = 'master'$/;"	v
+__version_cmake	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_cmake = '1.2.1.999'$/;"	v
+__version_is_clean	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_is_clean = 'False'$/;"	v
 __version_last_release	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_last_release = '1.2.1'$/;"	v
-__version_long	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_long = '1.2.1+zzzzzzz'$/;"	v
+__version_long	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_long = 'undefined+ccbd7d9'$/;"	v
 __version_prerelease	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_prerelease = 'False'$/;"	v
-__version_release	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_release = 'True'$/;"	v
+__version_release	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/metadata.py	/^__version_release = 'False'$/;"	v
 __xor__	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def __xor__(self, other):$/;"	m	class:ParserElement	file:
 _asStringList	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def _asStringList(self, sep=''):$/;"	m	class:ParseResults
 _bslash	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^_bslash = chr(92)$/;"	v
@@ -1521,9 +1518,7 @@ addField	/mnt/HD/software/chronusq_public/include/realtime/fields.hpp	/^    inli
 addField	/mnt/HD/software/chronusq_public/include/realtime/fields.hpp	/^    inline void addField(_TDField f){ addField(std::make_shared<_TDField>(f)); }$/;"	f	struct:ChronusQ::TDEMPerturbation
 addField	/mnt/HD/software/chronusq_public/include/realtime/fields.hpp	/^    inline void addField(std::shared_ptr<TDEMFieldBase> f) {$/;"	f	struct:ChronusQ::TDEMPerturbation
 addField	/mnt/HD/software/chronusq_public/include/realtime/fields.hpp	/^    inline void addField(std::shared_ptr<_TDField> f){ addField(cast(f)); };$/;"	f	struct:ChronusQ::TDEMPerturbation
-addFock	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		void addFock(MatsT* fock)$/;"	f	class:ChronusQ::PCMBase
-addFock	/mnt/HD/software/chronusq_public/include/pcm/impl.hpp	/^MatsT* PCMBase::addFock(double* fock1, MatsT* fock2)$/;"	f	class:PCMBase
-addFock	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	MatsT* PCMBase::addFock(double* fock1, MatsT* fock2)$/;"	f	class:ChronusQ::PCMBase
+addFock	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::addFock(MatsT* fock)$/;"	f	class:ChronusQ::PCMBase
 addMagPert	/mnt/HD/software/chronusq_public/src/singleslater/fock.cxx	/^  void SingleSlater<dcomplex, dcomplex>::addMagPert(EMPerturbation &pert,$/;"	f	class:ChronusQ::SingleSlater
 addMagPert	/mnt/HD/software/chronusq_public/src/singleslater/fock.cxx	/^  void SingleSlater<dcomplex, double>::addMagPert(EMPerturbation &pert,$/;"	f	class:ChronusQ::SingleSlater
 addMagPert	/mnt/HD/software/chronusq_public/src/singleslater/fock.cxx	/^  void SingleSlater<double, double>::addMagPert(EMPerturbation &pert,$/;"	f	class:ChronusQ::SingleSlater
@@ -1624,6 +1619,8 @@ binomial_generating_function	/mnt/HD/software/chronusq_public/external/pcmsolver
 blockRinfinity_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/IEFSolver.hpp	/^  std::vector<Eigen::MatrixXd> blockRinfinity_;$/;"	m	class:pcm::solver::IEFSolver
 blockS_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/CPCMSolver.hpp	/^  std::vector<Eigen::MatrixXd> blockS_;$/;"	m	class:pcm::solver::CPCMSolver
 blockTepsilon_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/IEFSolver.hpp	/^  std::vector<Eigen::MatrixXd> blockTepsilon_;$/;"	m	class:pcm::solver::IEFSolver
+blockTepsilon_LU	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/IEFSolver.hpp	/^  std::vector<Eigen::PartialPivLU<Eigen::MatrixXd>> blockTepsilon_LU;$/;"	m	class:pcm::solver::IEFSolver
+blockTepsilon_LU_adjoint	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/IEFSolver.hpp	/^  std::vector<Eigen::PartialPivLU<Eigen::MatrixXd>> blockTepsilon_LU_adjoint;$/;"	m	class:pcm::solver::IEFSolver
 blockTransform	/mnt/HD/software/chronusq_public/include/response/polarization.hpp	/^      inline void blockTransform(size_t N, size_t nVec, double fact, $/;"	f	class:ChronusQ::PolarizationPropagator
 bnf	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    bnf = None$/;"	v	class:GetkwParser
 bootstrapFactory	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/bi_operators/BoundaryIntegralOperator.hpp	/^inline Factory<detail::CreateBIOperator> bootstrapFactory() {$/;"	f	namespace:pcm::bi_operators
@@ -1776,6 +1773,7 @@ computeERIabcd	/mnt/HD/software/chronusq_public/src/aointegrals/aointegrals_twoe
 computeEnergy	/mnt/HD/software/chronusq_public/include/quantum/base.hpp	/^    void computeEnergy(EMPerturbation &pert){$/;"	f	class:ChronusQ::QuantumBase
 computeEnergy	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham.hpp	/^    virtual void computeEnergy() {$/;"	f	class:ChronusQ::KohnSham
 computeEnergy	/mnt/HD/software/chronusq_public/include/singleslater/quantum.hpp	/^  void SingleSlater<MatsT,IntsT>::computeEnergy() {$/;"	f	class:ChronusQ::SingleSlater
+computeEnergy	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	double PCMBase::computeEnergy()$/;"	f	class:ChronusQ::PCMBase
 computeFmTTaylor	/mnt/HD/software/chronusq_public/src/aointegrals/aointegrals_onee_real_gto.cxx	/^  void RealGTOIntEngine::computeFmTTaylor($/;"	f	class:ChronusQ::RealGTOIntEngine
 computeGIAOAngularL	/mnt/HD/software/chronusq_public/src/aointegrals/aointegrals_onee_complex_giao.cxx	/^  std::vector<std::vector<dcomplex>> ComplexGIAOIntEngine::computeGIAOAngularL($/;"	f	class:ChronusQ::ComplexGIAOIntEngine
 computeGIAOEDipoleE1_len	/mnt/HD/software/chronusq_public/src/aointegrals/aointegrals_onee_complex_giao.cxx	/^  std::vector<std::vector<dcomplex>> ComplexGIAOIntEngine::computeGIAOEDipoleE1_len($/;"	f	class:ChronusQ::ComplexGIAOIntEngine
@@ -1839,8 +1837,6 @@ conv_dval	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolv
 conv_ival	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def conv_ival(self, s, loc, toks):$/;"	m	class:GetkwParser
 conv_lval	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def conv_lval(self, s, loc, toks):$/;"	m	class:GetkwParser
 convert_area_scalar	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pcmparser.py	/^def convert_area_scalar(keyword):$/;"	f
-convert_double	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	Eigen::VectorXd convert_double(Eigen::VectorXcd vec)$/;"	f	namespace:ChronusQ
-convert_double	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	Eigen::VectorXd convert_double(Eigen::VectorXd vec)$/;"	f	namespace:ChronusQ
 convert_double	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	Eigen::RowVectorXd PCMBase::convert_double(Eigen::RowVectorXcd vec)$/;"	f	class:ChronusQ::PCMBase
 convert_double	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	Eigen::RowVectorXd PCMBase::convert_double(Eigen::RowVectorXd vec)$/;"	f	class:ChronusQ::PCMBase
 convert_length_array	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pcmparser.py	/^def convert_length_array(keyword):$/;"	f
@@ -2225,6 +2221,7 @@ fix_repeating_arguments	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/
 fixate_type	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def fixate_type(self, arg):$/;"	m	class:GetkwParser
 flat	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^    def flat(self, *types):$/;"	m	class:ChildPattern
 flat	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^    def flat(self, *types):$/;"	m	class:ParentPattern
+fliporbits	/mnt/HD/software/chronusq_public/src/singleslater/sjc.cxx	/^	void SingleSlater<double,double>::fliporbits()$/;"	f	class:ChronusQ::SingleSlater
 fn	/mnt/HD/software/chronusq_public/external/cnpy/bin/mat2npz	/^    fn = f.replace('.mat','.npz')$/;"	v
 fn	/mnt/HD/software/chronusq_public/external/cnpy/bin/npy2mat	/^   fn = f.replace('.npy','')$/;"	v
 fn	/mnt/HD/software/chronusq_public/external/cnpy/bin/npy2mat	/^   fn = fn.replace('.','_')$/;"	v
@@ -2245,7 +2242,6 @@ formFXC	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham/fxc.hpp	/
 formFock	/mnt/HD/software/chronusq_public/include/realtime/fock.hpp	/^  void RealTime<_SSTyp,IntsT>::formFock(bool increment, double t) {$/;"	f	class:ChronusQ::RealTime
 formFock	/mnt/HD/software/chronusq_public/include/singleslater/fock.hpp	/^  void SingleSlater<MatsT,IntsT>::formFock($/;"	f	class:ChronusQ::SingleSlater
 formFock	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham.hpp	/^    virtual void formFock(EMPerturbation &pert, bool increment = false, double HFX = 0.) {$/;"	f	class:ChronusQ::KohnSham
-formFock	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	double* PCMBase::formFock(std::shared_ptr<CQMemManager> mem, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 formFock	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 formFullFromMemory	/mnt/HD/software/chronusq_public/include/response/particleparticle/singleslater.hpp	/^  MatsT * ParticleParticlePropagator<SingleSlater<MatsT,IntsT>>::formFullFromMemory() {$/;"	f	class:ChronusQ::ParticleParticlePropagator
 formFullFromMemory	/mnt/HD/software/chronusq_public/include/response/polarization/singleslater.hpp	/^  MatsT * PolarizationPropagator<SingleSlater<MatsT, IntsT>>::formFullFromMemory() {$/;"	f	class:ChronusQ::PolarizationPropagator
@@ -2308,11 +2304,8 @@ formW	/mnt/HD/software/chronusq_public/src/singleslater/fock.cxx	/^  void formW(
 formZ_fxc	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham/fxc.hpp	/^  void KohnSham<MatsT, IntsT>::formZ_fxc(DENSITY_TYPE denType, bool isGGA, size_t NPts, size_t NBE, size_t IOff,$/;"	f	class:ChronusQ::KohnSham
 formZ_vxc	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham/vxc.hpp	/^  void KohnSham<MatsT,IntsT>::formZ_vxc(DENSITY_TYPE denTyp, bool isGGA, size_t NPts, size_t NBE, size_t IOff, $/;"	f	class:ChronusQ::KohnSham
 formal_usage	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^def formal_usage(printable_usage):$/;"	f
-formcharge	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	void PCMBase::formcharge()\/\/surface potential$/;"	f	class:ChronusQ::PCMBase
 formcharge	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::formcharge()\/\/surface potential$/;"	f	class:ChronusQ::PCMBase
-formpotential	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
-formpotential	/mnt/HD/software/chronusq_public/include/pcm/impl.hpp	/^void PCMBase::formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:PCMBase
-formpotential	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	void PCMBase::formpotential(std::shared_ptr<CQMemManager> mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
+formpotential	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 fortran_order	/mnt/HD/software/chronusq_public/external/cnpy/include/cnpy.h	/^        bool fortran_order;$/;"	m	struct:cnpy::NpyArray
 fortran_order	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/cnpy.hpp	/^  bool fortran_order;$/;"	m	struct:cnpy::NpyArray
 free	/mnt/HD/software/chronusq_public/include/memmanager.hpp	/^     void free( T* &ptr ) {$/;"	f	class:ChronusQ::CQMemManager
@@ -2505,8 +2498,7 @@ infixNotation	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcm
 infoStream_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/interface/Meddle.hpp	/^  std::ostringstream infoStream_;$/;"	m	class:pcm::__final
 ini	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    ini = test(teststr)$/;"	v
 initialize	/mnt/HD/software/chronusq_public/include/cxxapi/boilerplate.hpp	/^  inline void initialize() {$/;"	f	namespace:ChronusQ
-initialize	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	void PCMBase::initialize(const Molecule& molecule)$/;"	f	class:ChronusQ::PCMBase
-initialize	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::initialize(const Molecule& molecule)$/;"	f	class:ChronusQ::PCMBase
+initialize	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::initialize(CQMemManager& mem,const Molecule& molecule)$/;"	f	class:ChronusQ::PCMBase
 initpcm	/mnt/HD/software/chronusq_public/include/singleslater/base/initpcm.hpp	/^	void SingleSlaterBase::initpcm(std::shared_ptr<PCMBase> pcmbase)$/;"	f	class:ChronusQ::SingleSlaterBase
 inlineLiteralsUsing	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def inlineLiteralsUsing(cls):$/;"	m	class:ParserElement
 inlineLiteralsUsing	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    inlineLiteralsUsing = staticmethod(inlineLiteralsUsing)$/;"	v	class:ParserElement
@@ -2518,6 +2510,7 @@ inside_type	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolve
 intAlg	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^    IntegrationAlgorithm intAlg  = MMUT;         \/\/\/< Integration Algorithm$/;"	m	struct:ChronusQ::IntegrationScheme
 intParam	/mnt/HD/software/chronusq_public/include/singleslater/kohnsham.hpp	/^    IntegrationParam intParam; \/\/\/< Numerical integration controls$/;"	m	class:ChronusQ::KohnSham
 intScheme	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^    IntegrationScheme intScheme;   \/\/\/< Integration scheme (MMUT, etc)$/;"	m	struct:ChronusQ::RealTimeBase
+int_path	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		std::string int_path;$/;"	m	class:ChronusQ::PCMBase
 integrate	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/taylor.hpp	/^  void integrate(void)$/;"	f	class:taylor
 integrate	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/tmath.hpp	/^  static void integrate(T *x)$/;"	f	struct:tfuns
 integrate	/mnt/HD/software/chronusq_public/include/grid/integrator.hpp	/^    T integrate(const F &func) {$/;"	f	class:ChronusQ::Integrator1D
@@ -2535,7 +2528,7 @@ integratorScaling_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/P
 integratorType	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/bi_operators/BIOperatorData.hpp	/^  std::string integratorType;$/;"	m	struct:pcm::BIOperatorData
 integratorType_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/interface/Input.hpp	/^  std::string integratorType_;$/;"	m	class:pcm::Input
 internal	/mnt/HD/software/chronusq_public/include/util/mpi.hpp	/^    int internal = 0;$/;"	m	struct:ChronusQ::MPI_Comm
-ints	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::MatrixXd ints;$/;"	m	class:ChronusQ::PCMBase
+ints	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		double* ints;$/;"	m	class:ChronusQ::PCMBase
 ints_type	/mnt/HD/software/chronusq_public/include/singleslater.hpp	/^    typedef IntsT ints_type;$/;"	t	class:ChronusQ::SingleSlater
 inv_expand	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/tmath.hpp	/^static void inv_expand(T *t, const T &a)$/;"	f
 inv_taylor	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/taylor_math.hpp	/^static void inv_taylor(taylor<T,1,N>& t, const T &a)$/;"	f
@@ -2566,7 +2559,7 @@ is_required	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmso
 is_required	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_required(self):$/;"	m	class:Section
 is_set	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_set(self):$/;"	m	class:Keyword
 is_set	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_set(self, key=None):$/;"	m	class:Section
-is_stored	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool is_stored;$/;"	m	class:ChronusQ::PCMBase
+is_stored	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool is_stored=false;$/;"	m	class:ChronusQ::PCMBase
 is_type	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_type(self, typ):$/;"	m	class:Keyword
 isotropic_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/ISolver.hpp	/^  bool isotropic_;$/;"	m	class:pcm::ISolver
 isscalar	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/ctaylor.hpp	/^  int isscalar; \/\/ If isscalar the only c[0] is defined.$/;"	m	struct:ctaylor
@@ -2825,6 +2818,7 @@ nrmFDC	/mnt/HD/software/chronusq_public/include/singleslater/base.hpp	/^    doub
 nsect	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/getkw/Section.h	/^  int nsect;$/;"	m	class:Section
 nucRepEnergy	/mnt/HD/software/chronusq_public/include/molecule.hpp	/^    double   nucRepEnergy; \/\/\/< Nuclear-Nuclear repulsion energy$/;"	m	struct:ChronusQ::Molecule
 nucRepForce	/mnt/HD/software/chronusq_public/include/molecule.hpp	/^    dynmat_t nucRepForce; \/\/\/< Nuclear gradient contribution$/;"	m	struct:ChronusQ::Molecule
+nucp	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd nucp;\/\/nuclear potential$/;"	m	class:ChronusQ::PCMBase
 nullDebugAction	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^def nullDebugAction(*args):$/;"	f
 num_bytes	/mnt/HD/software/chronusq_public/external/cnpy/include/cnpy.h	/^        size_t num_bytes() const {$/;"	f	struct:cnpy::NpyArray
 num_ele	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		size_t num_ele=nB;$/;"	m	class:ChronusQ::PCMBase
@@ -2944,7 +2938,6 @@ operator <<	/mnt/HD/software/chronusq_public/include/aointegrals/print.hpp	/^  s
 operator <<	/mnt/HD/software/chronusq_public/include/memmanager.hpp	/^    friend inline std::ostream& operator<<(std::ostream &out , $/;"	f	class:ChronusQ::CQMemManager
 operator <<	/mnt/HD/software/chronusq_public/src/basisset/basisset.cxx	/^  std::ostream& operator<<(std::ostream &out, const BasisSet &basis) {$/;"	f	namespace:ChronusQ
 operator <<	/mnt/HD/software/chronusq_public/src/molecule/molecule.cxx	/^  std::ostream& operator<<(std::ostream &out, const Molecule &mol) {$/;"	f	namespace:ChronusQ
-operator <<	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	std::ostream& operator<< (std::ostream& os, const PCMBase pcmbase)$/;"	f	namespace:ChronusQ
 operator <<	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	std::ostream& operator<< (std::ostream& os, const PCMBase pcmbase)$/;"	f	namespace:ChronusQ
 operator =	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/ctaylor.hpp	/^  ctaylor<T,Nvar> &operator=(const S& c0)$/;"	f	struct:ctaylor
 operator =	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/ctaylor.hpp	/^  ctaylor<T,Nvar> &operator=(const ctaylor<T,Nvar>& t)$/;"	f	struct:ctaylor
@@ -3083,7 +3076,7 @@ pcm	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/
 pcm	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Sphere.hpp	/^namespace pcm {$/;"	n
 pcm	/mnt/HD/software/chronusq_public/include/singleslater/base.hpp	/^	std::shared_ptr<PCMBase> pcm=nullptr;$/;"	m	class:ChronusQ::SingleSlaterBase
 pcm_context	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		pcmsolver_context_t* pcm_context;$/;"	m	class:ChronusQ::PCMBase
-pcmfock	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::MatrixXd pcmfock;$/;"	m	class:ChronusQ::PCMBase
+pcmfock	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		double* pcmfock;$/;"	m	class:ChronusQ::PCMBase
 pcmsolver	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/pcmsolver.f90	/^module pcmsolver$/;"	m
 pcmsolver_bool_t	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/PCMInput.h	/^typedef bool pcmsolver_bool_t;$/;"	t
 pcmsolver_bool_t	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/PCMInput.h	/^typedef enum { pcmsolver_false, pcmsolver_true } pcmsolver_bool_t;$/;"	t	typeref:enum:__anon3
@@ -3364,6 +3357,7 @@ savFile	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^    SafeFile sav
 savFile	/mnt/HD/software/chronusq_public/include/response/base.hpp	/^    SafeFile savFile; \/\/\/< Data File$/;"	m	struct:ChronusQ::ResponseBase
 savFile	/mnt/HD/software/chronusq_public/include/singleslater/base.hpp	/^    SafeFile savFile;$/;"	m	class:ChronusQ::SingleSlaterBase
 saveCurrentState	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^  void SingleSlater<MatsT,IntsT>::saveCurrentState() {$/;"	f	class:ChronusQ::SingleSlater
+savestep	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		size_t savestep=100;$/;"	m	class:ChronusQ::PCMBase
 scale	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Sphere.hpp	/^  void scale(double scaling) {$/;"	f	struct:pcm::utils::Sphere
 scaling	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/PCMInput.h	/^  pcmsolver_bool_t scaling;$/;"	m	struct:PCMInput
 scaling	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/bi_operators/BIOperatorData.hpp	/^  double scaling;$/;"	m	struct:pcm::BIOperatorData
@@ -3517,10 +3511,10 @@ sqrtx_asinh_sqrtx	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PC
 srange	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^def srange(s):$/;"	f
 sstack	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/getkw/Getkw.h	/^  std::stack<const Section *> sstack;$/;"	m	class:Getkw
 starOrb	/mnt/HD/software/chronusq_public/include/response/particleparticle.hpp	/^    std::pair<long int, long int> starOrb;             \/\/ Orbitals for *-ref$/;"	m	struct:ChronusQ::SingleSlaterParticleParticleBase
+start_save	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool start_save=false;$/;"	m	class:ChronusQ::PCMBase
 status	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def status(self):$/;"	m	class:Section
 stepSize	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^    double  stepSize;   \/\/\/< Current step size$/;"	m	struct:ChronusQ::IntegrationProgress
-store	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool store;\/\/whether to store the matrix$/;"	m	class:ChronusQ::PCMBase
-storeFock	/mnt/HD/software/chronusq_public/src/pcm.cxx	/^	void PCMBase::storeFock(std::shared_ptr<CQMemManager> mem, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
+store	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool store=false;\/\/whether to store the matrix$/;"	m	class:ChronusQ::PCMBase
 storeFock	/mnt/HD/software/chronusq_public/src/pcm/pcm.cxx	/^	void PCMBase::storeFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset)$/;"	f	class:ChronusQ::PCMBase
 store_data	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def store_data(self, s, l, t):$/;"	m	class:GetkwParser
 store_key	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def store_key(self, s, l, t):$/;"	m	class:GetkwParser
@@ -3542,7 +3536,7 @@ subscribe	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/
 suppress	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def suppress(self):$/;"	m	class:ParserElement
 suppress	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def suppress(self):$/;"	m	class:Suppress
 surc	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surc;\/\/surface charge$/;"	m	class:ChronusQ::PCMBase
-surp	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surp;$/;"	m	class:ChronusQ::PCMBase
+surp	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surp;\/\/surface potential$/;"	m	class:ChronusQ::PCMBase
 symbol	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Atom.hpp	/^  std::string symbol;$/;"	m	struct:pcm::utils::Atom
 symmetryBlocking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryBlocking(Eigen::MatrixXd & matrix,$/;"	f	namespace:pcm::utils
 symmetryPacking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryPacking(std::vector<Eigen::MatrixXd> & blockedMatrix,$/;"	f	namespace:pcm::utils
@@ -3610,6 +3604,7 @@ timer	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/util
 timerDONE	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Timer.hpp	/^inline void timerDONE(const std::string & fname) {$/;"	f	namespace:timer
 timerOFF	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Timer.hpp	/^inline void timerOFF(const std::string & chkpt_name) {$/;"	f	namespace:timer
 timerON	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Timer.hpp	/^inline void timerON(const std::string & chkpt_name) {$/;"	f	namespace:timer
+times	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		size_t times=0;$/;"	m	class:ChronusQ::PCMBase
 timing	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Timer.hpp	/^typedef pcm::tuple<double, double> timing;$/;"	t	namespace:timer
 timings	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/LoggerImpl.hpp	/^enum printLevel { timings, coarse, fine, everything };$/;"	e	enum:logging::printLevel
 timings_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Timer.hpp	/^  TimingsMap timings_;$/;"	m	class:timer::Timer

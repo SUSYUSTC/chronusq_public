@@ -21,15 +21,11 @@
 #   E-Mail: xsli@uw.edu
 #
 # include(ExcludeProject)
-set( PCM_PREFIX ${PROJECT_SOURCE_DIR}/external/pcmsolver )
-message( "${PCM_PREFIX}" )
-set( PCM_INCLUDEDIR ${PCM_PREFIX}/include )
-set( PCM_LIBDIR ${PCM_PREFIX}/lib )
+set( CNPY_PREFIX ${PROJECT_SOURCE_DIR}/external/cnpy )
+set( CNPY_INCLUDEDIR ${CNPY_PREFIX}/include )
+set( CNPY_LIBDIR ${CNPY_PREFIX}/lib )
 
-include_directories( ${PCM_INCLUDEDIR} )
-link_directories( ${PCM_LIBDIR} )
+include_directories( ${CNPY_INCLUDEDIR} )
+link_directories( ${CNPY_LIBDIR} )
 
-message( "${PCM_LIBDIR}/libpcm.a" )
-
-# list( APPEND CQ_EXT_LINK /home/jacob/anaconda3/lib/libz.so )
-list( APPEND CQ_EXT_LINK ${PCM_LIBDIR}/libpcm.so )
+list( APPEND CQ_EXT_LINK ${CNPY_LIBDIR}/libcnpy.so )

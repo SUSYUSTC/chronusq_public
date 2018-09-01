@@ -50,7 +50,6 @@
 #include <pcm.hpp>
 #include <iomanip>
 #include <singleslater/base/initpcm.hpp>
-#include <cnpy.h>
 
 //#include <cubegen.hpp>
 
@@ -74,7 +73,7 @@ namespace ChronusQ {
     if( outFileName.compare("STDOUT") and (rank == 0) ) {
 
       outfile = std::make_shared<std::ofstream>(outFileName);
-      //std::cout.rdbuf(outfile->rdbuf());
+      std::cout.rdbuf(outfile->rdbuf());
 
     }
 
@@ -207,6 +206,7 @@ namespace ChronusQ {
 
       auto rt = CQRealTimeOptions(output,input,ss);
       rt->savFile = rstFile;
+	  ss->pcm->start_save=true;
       rt->doPropagation();
 
     }

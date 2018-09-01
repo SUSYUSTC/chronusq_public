@@ -82,11 +82,15 @@ namespace ChronusQ {
           this->fockMatrixOrtho[i],{NB,NB});
 
       }
+	  savFile.safeWriteData("SCF/ORTHO1", this->ortho1,{NB,NB});
 
-      // Save MOs
-      savFile.safeWriteData("SCF/MO1", this->mo1, {NBC,NBC});
-      if( this->nC == 1 and not this->iCS )
-        savFile.safeWriteData("SCF/MO2", this->mo2, {NBC,NBC});
+	  savFile.safeWriteData("SCF/ORTHO2", this->ortho2,{NB,NB});
+
+
+	  // Save MOs
+	  savFile.safeWriteData("SCF/MO1", this->mo1, {NBC,NBC});
+	  if( this->nC == 1 and not this->iCS )
+		  savFile.safeWriteData("SCF/MO2", this->mo2, {NBC,NBC});
 
       // Save Energies
       savFile.safeWriteData("SCF/TOTAL_ENERGY",&this->totalEnergy,
@@ -378,6 +382,8 @@ namespace ChronusQ {
 
       // Compute new energy (with new Density)
       this->computeProperties(pert);
+	if(this->pcm!=nullptr and this->pcm->use_PCM)
+		this->totalEnergy+=this->pcm->computeEnergy();
       scfConv.deltaEnergy = this->totalEnergy - oldEnergy;
 
       bool energyConv = std::abs(scfConv.deltaEnergy) < 
