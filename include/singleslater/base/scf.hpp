@@ -26,6 +26,7 @@
 
 #include <singleslater.hpp>
 #include <util/matout.hpp>
+#include <sjc_debug.hpp>
 
 namespace ChronusQ {
 
@@ -61,6 +62,8 @@ namespace ChronusQ {
     for( scfConv.nSCFIter = 0; scfConv.nSCFIter < scfControls.maxSCFIter; 
          scfConv.nSCFIter++) {
 
+		if(this->DebugLevel>=2)
+			sjc_debug::debug0(this->DebugDepth,"SCF Loop "+std::to_string(scfConv.nSCFIter));
       // Save current state of the wave function (method specific)
       saveCurrentState();
 
@@ -69,7 +72,11 @@ namespace ChronusQ {
 
       // Get new orbtials and densities from current state: 
       //   C/D(k) -> C/D(k + 1)
+		if(this->DebugLevel>=2)
+			sjc_debug::debugP(this->DebugDepth,"SCF","getNewOrbitals");
       getNewOrbitals(pert);
+		if(this->DebugLevel>=2)
+			sjc_debug::debugN(this->DebugDepth,"SCF","getNewOrbitals");
 
       // Evaluate convergence
       isConverged = evalConver(pert);
@@ -89,6 +96,7 @@ namespace ChronusQ {
 	if(this->pcm!=nullptr and this->pcm->use_PCM)
 		this->totalEnergy+=this->pcm->computeEnergy();
 
+	std::cout << "Energy done" << std::endl;
     //printSCFFooter(isConverged);
     if(not isConverged)
       CErr(std::string("SCF Failed to converged within ") + 

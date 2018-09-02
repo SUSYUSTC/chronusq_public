@@ -82,9 +82,26 @@ namespace ChronusQ {
           this->fockMatrixOrtho[i],{NB,NB});
 
       }
-	  savFile.safeWriteData("SCF/ORTHO1", this->ortho1,{NB,NB});
 
-	  savFile.safeWriteData("SCF/ORTHO2", this->ortho2,{NB,NB});
+	  if(this->DebugLevel>=2)
+		  sjc_debug::debug0(this->DebugDepth,"start saving ortho");
+	  try
+	  {
+		  savFile.safeWriteData("SCF/ORTHO1", this->ortho1,{NB,NB});
+	  }
+	  catch(...)
+	  {
+		  std::cout << "No Ortho1" << std::endl;
+	  }
+
+	  try
+	  {
+		  savFile.safeWriteData("SCF/ORTHO2", this->ortho2,{NB,NB});
+	  }
+	  catch(...)
+	  {
+		  std::cout << "No Ortho2" << std::endl;
+	  }
 
 
 	  // Save MOs
@@ -221,12 +238,16 @@ namespace ChronusQ {
                      scfConv.nSCFIter % scfControls.nIncFock != 0 and
                      scfControls.guess != RANDOM;
 
+	if(this->DebugLevel>=2)
+		sjc_debug::debugP(this->DebugDepth,"getNewOrbitals","formFock");
     // Form the Fock matrix D(k) -> F(k)
     if( frmFock ) {
       formFock(pert,increment);
       //if( MPIRank(comm) == 0 )
       //  printFockTimings(std::cout);
     }
+	if(this->DebugLevel>=2)
+		sjc_debug::debugN(this->DebugDepth,"getNewOrbitals","formFock");
 
     if( scfControls.scfAlg == _NEWTON_RAPHSON_SCF and scfConv.nSCFIter > 0 )
       scfControls.scfStep = _NEWTON_RAPHSON_STEP;
@@ -798,6 +819,82 @@ namespace ChronusQ {
 
     this->memManager.free(SCR,SCR2);
   }
+
+	template<typename MatsT, typename IntsT>
+	void SingleSlater<MatsT,IntsT>::swaporbit() {
+		if(this->nC==1)
+		{
+			typedef Eigen::Matrix<MatsT,-1,-1> Matrix;
+			typedef Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor> RowMatrix;
+			typedef Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> MapMatrix;
+			typedef Eigen::Map<Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor>> MapRowMatrix;
+			size_t NB = this->aoints.basisSet().nBasis;
+			MapRowMatrix AMO(this->mo1,NB,NB);
+			MapRowMatrix BMO(this->mo2,NB,NB);
+			if(this->DebugLevel>=2)
+			{
+				std::cout << "before change" << std::endl;
+				std::cout << "AMO" << std::endl;
+				std::cout << AMO << std::endl;
+				std::cout << "BMO" << std::endl;
+				std::cout << BMO << std::endl;
+				for(size_t i=0;i<this->onePDM.size();++i)
+				{
+					std::cout << "onePDM " << i << std::endl;
+					std::cout << MapRowMatrix(this->onePDM[i],NB,NB) << std::endl;
+				}
+				for(size_t i=0;i<this->onePDMOrtho.size();++i)
+				{
+					std::cout << "onePDMOrtho " << i << std::endl;
+					std::cout << MapRowMatrix(this->onePDMOrtho[i],NB,NB) << std::endl;
+				}
+			}
+			Eigen::Matrix<MatsT,1,-1> temprow=AMO.row(this->nOA-1);
+			AMO.row(this->nOA-1)=AMO.row(this->nOA);
+			AMO.row(this->nOA)=temprow;
+			this->formDensity();
+			for(size_t i=0;i<this->onePDM.size();++i)
+				this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);
+			if(this->DebugLevel>=2)
+			{
+				std::cout << "after change" << std::endl;
+				std::cout << "AMO" << std::endl;
+				std::cout << AMO << std::endl;
+				std::cout << "BMO" << std::endl;
+				std::cout << BMO << std::endl;
+				for(size_t i=0;i<this->onePDM.size();++i)
+				{
+					std::cout << "onePDM " << i << std::endl;
+					std::cout << MapRowMatrix(this->onePDM[i],NB,NB) << std::endl;
+				}
+				for(size_t i=0;i<this->onePDMOrtho.size();++i)
+				{
+					std::cout << "onePDMOrtho " << i << std::endl;
+					std::cout << MapRowMatrix(this->onePDMOrtho[i],NB,NB) << std::endl;
+				}
+			}
+			/*
+			Eigen::Matrix<MatsT,-1,-1> BMO=Eigen::Map<Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor>>(this->mo2,NB,NB);
+			Eigen::Matrix<MatsT,-1,-1> contracted_AMO(this->nOA,NB);
+			contracted_AMO=AMO.block(0,0,this->nOA,NB);
+			contracted_AMO.row(nOA)=AMO.row(nOA+1);
+			Eigen::Matrix<MatsT,-1,-1> contracted_BMO(this->nOB,NB);
+			contracted_BMO=BMO.block(0,0,this->nOB,NB);
+			Eigen::Matrix<MatsT,-1,-1> ADM=contracted_AMO.adjoint()*contracted_AMO;
+			Eigen::Matrix<MatsT,-1,-1> BDM=contracted_BMO.adjoint()*contracted_BMO;
+			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMs(this->onePDM[0],NB,NB);
+			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMz(this->onePDM[1],NB,NB);
+			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMorthos(this->onePDMOrtho[0],NB,NB);
+			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMorthoz(this->onePDMOrtho[1],NB,NB);
+			Eigen::Map<Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor>> ortho(this->ortho2,NB,NB);
+			PDMs=ADM+BDM;
+			PDMz=ADM-BDM;
+			PDMorthos=ortho.transpose()*PDMs*ortho;
+			PDMorthoz=ortho.transpose()*PDMz*ortho;
+			*/
+		}
+	}
+
 
 }; // namespace ChronusQ
 

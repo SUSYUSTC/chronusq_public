@@ -20,7 +20,7 @@
 # Contact the Developers:
 #   E-Mail: xsli@uw.edu
 #
-add_library(singleslater STATIC impl.cxx fock.cxx)
+add_library(singleslater STATIC impl.cxx fock.cxx )
 
 # Append aointegrals to executable link
 list(APPEND CQEX_LINK singleslater)

@@ -40,6 +40,7 @@
 #include <Eigen/Core>
 #include <cnpy.h>
 #include <pcm.hpp>
+#include <sjc_debug.hpp>
 
 //#define _DEBUGORTHO
 
@@ -64,7 +65,11 @@ namespace ChronusQ {
     auto GDStart = tick(); // Start time for G[D]
 
     // Form G[D]
+	if(this->DebugLevel>=2)
+		sjc_debug::debugP(this->DebugDepth,"formFock","formGD");
     formGD(pert,increment,xHFX);
+	if(this->DebugLevel>=2)
+		sjc_debug::debugN(this->DebugDepth,"formFock","formGD");
 
     GDDur = tock(GDStart); // G[D] Duraction
 
@@ -83,6 +88,8 @@ namespace ChronusQ {
       MatAdd('N','N', NB, NB, MatsT(1.), fockMatrix[i], NB, MatsT(1.), twoeH[i], NB, fockMatrix[i], NB);
 
 
+	if(this->DebugLevel>=2)
+		sjc_debug::debug0(this->DebugDepth,"coreH and twoeH contribute to fock");
 
 
     // Add in the electric field contributions
@@ -100,6 +107,9 @@ namespace ChronusQ {
           2. * dipAmp[i] * this->aoints.lenElecDipole[i][k];
 
     }
+	if(this->DebugLevel>=2)
+		sjc_debug::debug0(this->DebugDepth,"field contribute to fock");
+
 	  //PCM
 	  std::vector<size_t> npy_size={NB,NB};
 	  if(this->pcm!=nullptr and this->pcm->use_PCM)
@@ -124,25 +134,25 @@ namespace ChronusQ {
 		  std::cout << "PCM iteration ends" << std::endl;
 		  //std::cout << Eigen::Map<Eigen::MatrixXd>(this->pcm->pcmfock,this->pcm->nB,this->pcm->nB) << std::endl;
 		  //cnpy::npy_save("pcmFock"+std::to_string(times)+".npy",this->pcm->pcmfock,npy_size,"w");
-	  }
-	  if (pcm->start_save and (pcm->times%pcm->savestep==0))
-	  {
-		  for(int i=0;i!=this->fockMatrix.size();++i)
+		  if (pcm->start_save and (pcm->times%pcm->savestep==0))
 		  {
-			  //std::cout << "The " << i << "th component of Fock" << std::endl;
-			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->fockMatrix[i],this->pcm->nB,this->pcm->nB) << std::endl;
-			  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->fockMatrix[i],npy_size,"w");
+			  for(int i=0;i!=this->fockMatrix.size();++i)
+			  {
+				  //std::cout << "The " << i << "th component of Fock" << std::endl;
+				  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->fockMatrix[i],this->pcm->nB,this->pcm->nB) << std::endl;
+				  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->fockMatrix[i],npy_size,"w");
+			  }
+			  for(int i=0;i!=this->onePDM.size();++i)
+			  {
+				  //std::cout << "The " << i << "th component of Density Matrix" << std::endl;
+				  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->onePDM[i],this->pcm->nB,this->pcm->nB) << std::endl;
+				  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->onePDM[i],npy_size,"w");
+			  }
+			  std::cout << "Fock and DM Saved" << std::endl;
 		  }
-		  for(int i=0;i!=this->onePDM.size();++i)
-		  {
-			  //std::cout << "The " << i << "th component of Density Matrix" << std::endl;
-			  //std::cout << Eigen::Map<Eigen::Matrix<MatsT,-1,-1>>(this->onePDM[i],this->pcm->nB,this->pcm->nB) << std::endl;
-			  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->onePDM[i],npy_size,"w");
-		  }
-		  std::cout << "Fock and DM Saved" << std::endl;
+		  if (pcm->start_save)
+			  pcm->times++;
 	  }
-	  if (pcm->start_save)
-		  pcm->times++;
 
   
 #if 0

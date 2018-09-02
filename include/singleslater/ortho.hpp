@@ -45,6 +45,7 @@ namespace ChronusQ {
 
     size_t NB = this->aoints.basisSet().nBasis;
     size_t nSQ = NB*NB;
+
     // Make sure that the incoming matricies are of the right size
     assert(memManager.template getSize(A) == nSQ);
     assert(memManager.template getSize(TransA) == nSQ);
@@ -70,10 +71,10 @@ namespace ChronusQ {
   }; // AOIntegrals::Ortho1Trans
 
   /**
-   *  \brief Performs the transformation \f$ A' = O_1 A O_1^T\f$ for
+   *  \brief Performs the transformation \f$ A' = O_2 A O_2^T\f$ for
    *  a general matrix \f$A\f$ 
    *
-   *  \f$ O_1 \f$ is the orthonormalization matrix stored in 
+   *  \f$ O_2 \f$ is the orthonormalization matrix stored in 
    *  AOIntegrals::ortho1 (see AOIntegrals::ORTHO_TYPE and
    *  AOIntegrals::computeOrtho for details).
    *
@@ -106,7 +107,7 @@ namespace ChronusQ {
     memManager.free(SCR);
     if(std::is_same<TT,dcomplex>::value) memManager.free(O2);
     
-  }; // AOIntegrals::Ortho1Trans
+  }; // AOIntegrals::Ortho2Trans
 
   /**
    *  \brief Performs the transformation \f$ A' = O_1^T A O_1\f$ for
@@ -148,6 +149,45 @@ namespace ChronusQ {
     if(std::is_same<TT,dcomplex>::value) memManager.free(O1);
     
   }; // AOIntegrals::Ortho1TransT
+
+  /**
+   *  \brief Performs the transformation \f$ A' = O_2^T A O_2\f$ for
+   *  a general matrix \f$A\f$ 
+   *
+   *  \f$ O_2 \f$ is the orthonormalization matrix stored in 
+   *  AOIntegrals::ortho1 (see AOIntegrals::ORTHO_TYPE and
+   *  AOIntegrals::computeOrtho for details).
+   *
+   */ 
+  template <typename MatsT, typename IntsT>
+  template <typename TT> 
+  void SingleSlater<MatsT,IntsT>::Ortho2TransT(TT* A, TT* TransA) {
+
+    size_t NB = this->aoints.basisSet().nBasis;
+    size_t nSQ = NB*NB;
+    // Make sure that the incoming matricies are of the right size
+    assert(memManager.template getSize(A) == nSQ);
+    assert(memManager.template getSize(TransA) == nSQ);
+
+    // Allocate scratch space
+    TT* SCR = memManager.template malloc<TT>(nSQ);
+
+    // If necessary, create a complex copy of ortho2
+    TT* O2 = reinterpret_cast<TT*>(ortho2);
+    if(std::is_same<TT,dcomplex>::value) {
+      O2 = memManager.template malloc<TT>(nSQ);
+      std::copy_n(ortho2,nSQ,O2);
+    }
+
+    // Perform transformation
+    Gemm('C', 'N', NB, NB, NB, TT(1.), O2, NB, A, NB, TT(0.), SCR, NB);
+    Gemm('N', 'N', NB, NB, NB, TT(1.), SCR, NB, O2, NB, TT(0.), TransA, NB);
+
+    // Free up scratch space
+    memManager.free(SCR);
+    if(std::is_same<TT,dcomplex>::value) memManager.free(O2);
+    
+  }; // AOIntegrals::Ortho2Trans
 
 }; // namespace ChronusQ
 

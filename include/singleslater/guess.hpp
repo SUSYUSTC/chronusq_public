@@ -27,6 +27,7 @@
 #include <singleslater.hpp>
 #include <cqlinalg.hpp>
 #include <util/matout.hpp>
+#include <sjc_debug.hpp>
 
 namespace ChronusQ {
 
@@ -90,12 +91,51 @@ namespace ChronusQ {
                 << std::endl << std::endl;
 
     if( this->aoints.molecule().nAtoms == 1  and scfControls.guess == SAD ) {
-      CoreGuess();
-    } else if( scfControls.guess == CORE ) CoreGuess();
-    else if( scfControls.guess == SAD ) SADGuess();
-    else if( scfControls.guess == RANDOM ) RandomGuess();
-    else if( scfControls.guess == READMO ) ReadGuessMO(); 
-    else if( scfControls.guess == READDEN ) ReadGuess1PDM(); 
+		if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "CoreGuess");
+      	CoreGuess();
+		if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "CoreGuess");
+    } else if( scfControls.guess == CORE )
+	{
+		if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "CoreGuess");
+		CoreGuess();
+		if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "CoreGuess");
+	}
+    else if( scfControls.guess == SAD )
+	{
+		if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "SADGuess");
+		SADGuess();
+		if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "SADGuess");
+	}
+    else if( scfControls.guess == RANDOM )
+	{
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "RandomGuess");
+		RandomGuess();
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "RandomGuess");
+	}
+    else if( scfControls.guess == READMO )
+	{
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "ReadGuessMO");
+		ReadGuessMO(); 
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "ReadGuessMO");
+	}
+    else if( scfControls.guess == READDEN )
+	{
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugP(this->DebugDepth, "formGuess", "ReadGuess1PDM");
+		ReadGuess1PDM(); 
+	  	if(this->DebugLevel>=1)
+			sjc_debug::debugN(this->DebugDepth, "formGuess", "ReadGuess1PDM");
+	}
     else CErr("Unknown choice for SCF.GUESS",std::cout);
 
 
@@ -292,13 +332,23 @@ namespace ChronusQ {
       ss->scfControls.dampError = 1e-4;
       ss->scfControls.nKeep     = 8;
       ss->setCoreH(NON_RELATIVISTIC);
+	  ss->DebugLevel=this->DebugLevel;
+	  ss->DebugDepth=this->DebugDepth;
 
       ss->formCoreH(pert);
       aointsAtom.computeERIGTO();
 
 
+	  if(this->DebugLevel>=1)
+		  sjc_debug::debugP(this->DebugDepth,"SADGuess","formGuess");
       ss->formGuess();
+	  if(this->DebugLevel>=1)
+		  sjc_debug::debugN(this->DebugDepth,"SADGuess","formGuess");
+	  if(this->DebugLevel>=1)
+		  sjc_debug::debugP(this->DebugDepth,"SADGuess","SCF");
       ss->SCF(pert);
+	  if(this->DebugLevel>=1)
+		  sjc_debug::debugN(this->DebugDepth,"SADGuess","SCF");
 
       size_t NBbasis = basis.nBasis;
 

@@ -37,7 +37,8 @@ namespace ChronusQ {
     // Allowed keywords
     std::vector<std::string> allowedKeywords = {
       "REFERENCE",
-      "JOB"
+      "JOB",
+	  "DEBUG"
     };
 
     // Specified keywords
@@ -469,10 +470,9 @@ namespace ChronusQ {
     else           ss->setCoreH(NON_RELATIVISTIC);
 
 
+	ss->DebugLevel=input.getData<size_t>("QM.DEBUG");
 
-
-
-
+	
 
 
 

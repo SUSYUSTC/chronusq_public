@@ -27,6 +27,7 @@
 #include <chronusq_sys.hpp>
 #include <wavefunction.hpp>
 #include <singleslater/base.hpp>
+#include <sjc_debug.hpp>
 
 // Debug print triggered by Wavefunction
   
@@ -278,7 +279,7 @@ namespace ChronusQ {
     void scfDIIS(size_t);
 
 
-
+	virtual void swaporbit();
     // MO Transformations
     void MOFOCK();
 

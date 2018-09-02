@@ -153,6 +153,8 @@ namespace ChronusQ {
 
   private:
   public:
+	size_t DebugLevel;
+	size_t DebugDepth=0;
 
     // Save / Restart File
     SafeFile savFile;
@@ -253,6 +255,7 @@ namespace ChronusQ {
     // Perform an SCF procedure (see include/singleslater/scf.hpp for docs)
     void SCF(EMPerturbation &);
 	void initpcm(std::shared_ptr<PCMBase>);
+	virtual void swaporbit()=0;
 
   }; // class SingleSlaterBase
 
