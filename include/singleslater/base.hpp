@@ -155,6 +155,9 @@ namespace ChronusQ {
   public:
 	size_t DebugLevel;
 	size_t DebugDepth=0;
+	bool save_status=false;
+	size_t save_time=0;
+	size_t save_step;
 
     // Save / Restart File
     SafeFile savFile;

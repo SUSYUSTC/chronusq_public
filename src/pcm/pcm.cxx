@@ -104,11 +104,7 @@ namespace ChronusQ
 			std::string solvent=input.getData<std::string>("PCM.SOLVENT");
 			this->store=input.getData<bool>("PCM.STORE");
 			this->host_input.outside_epsilon=input.getData<double>("PCM.EPSILON");
-			try
-			{
-				this->savestep=input.getData<size_t>("PCM.SAVESTEP");
-			}
-			catch(...){}
+			this->savestep=input.getData<size_t>("QM.SAVESTEP");
 			this->host_input.area=area;
 			std::strcpy(this->host_input.solver_type,solver_type.c_str());
 			std::strcpy(this->host_input.solvent,solvent.c_str());

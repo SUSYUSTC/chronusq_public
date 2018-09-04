@@ -227,7 +227,7 @@ namespace ChronusQ {
 			ss->swaporbit();
 			auto rt = CQRealTimeOptions(output,input,ss);
 			rt->savFile = rstFile;
-			ss->pcm->start_save=true;
+			ss->save_status=true;
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugP(ss->DebugDepth, "procedual", "doPropagation");
 			rt->doPropagation();

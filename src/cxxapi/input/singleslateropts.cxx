@@ -38,7 +38,8 @@ namespace ChronusQ {
     std::vector<std::string> allowedKeywords = {
       "REFERENCE",
       "JOB",
-	  "DEBUG"
+	  "DEBUG",
+	  "SAVESTEP"
     };
 
     // Specified keywords
@@ -471,6 +472,7 @@ namespace ChronusQ {
 
 
 	ss->DebugLevel=input.getData<size_t>("QM.DEBUG");
+	ss->save_step=input.getData<size_t>("QM.SAVESTEP");
 
 	
 
