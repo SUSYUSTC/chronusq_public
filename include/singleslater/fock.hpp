@@ -128,12 +128,12 @@ namespace ChronusQ {
 			  sjc_debug::debug0(this->DebugDepth,"PCM iteration ends");
 		  //cnpy::npy_save("pcmFock"+std::to_string(times)+".npy",this->pcm->pcmfock,npy_size,"w");
 	  }
-	  if (this->save_status and (this->save_time%this->save_step==0))
+	  if (this->save_status and (this->save_time%this->save_step)==0)
 	  {
 		  for(int i=0;i!=this->fockMatrix.size();++i)
-			  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->fockMatrix[i],npy_size,"w");
+			  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->fockMatrix[i],npy_size,"w");
 		  for(int i=0;i!=this->onePDM.size();++i)
-			  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(pcm->times)+".npy",this->onePDM[i],npy_size,"w");
+			  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->onePDM[i],npy_size,"w");
 		  if (this->DebugLevel>=1)
 			  sjc_debug::debug0(this->DebugDepth,"Fock and DM Saved");
 	  }

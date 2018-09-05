@@ -225,11 +225,11 @@ namespace ChronusQ {
 			if( MPISize() > 1 ) CErr("RT + MPI NYI!",output);
 
 			ss->swaporbit();
-			auto rt = CQRealTimeOptions(output,input,ss);
-			rt->savFile = rstFile;
 			ss->save_status=true;
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugP(ss->DebugDepth, "procedual", "doPropagation");
+			auto rt = CQRealTimeOptions(output,input,ss);
+			rt->savFile = rstFile;
 			rt->doPropagation();
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugN(ss->DebugDepth, "procedual", "doPropagation");
