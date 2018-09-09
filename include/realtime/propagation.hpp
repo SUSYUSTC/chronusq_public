@@ -32,6 +32,9 @@
 
 #include <util/matout.hpp>
 #include <unsupported/Eigen/MatrixFunctions>
+#include <Eigen/Core>
+#include <cnpy.h>
+#include <sjc_debug.hpp>
 
 template <size_t N, typename T>
 std::array<T,N> valarray2array(const std::valarray<T> &x) {
@@ -48,6 +51,7 @@ namespace ChronusQ {
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::doPropagation() {
 
+	  size_t NUM=7;
     printRTHeader();
 
     bool Start(false); // Start the MMUT iterations
@@ -57,14 +61,14 @@ namespace ChronusQ {
 
     for( curState.xTime = 0., curState.iStep = 0; 
          curState.xTime <= (intScheme.tMax + intScheme.deltaT/4); 
-         curState.xTime += intScheme.deltaT, curState.iStep++ ) {
+		 curState.iStep++ ) {
 
       // Perturbation for the current time
       EMPerturbation pert_t = pert.getPert(curState.xTime);
 
 
 
-
+/*
 
 #if 1
       // Determine the step type for the current integration step 
@@ -103,9 +107,30 @@ namespace ChronusQ {
       curState.curStep = ForwardEuler;
 #endif
 
+*/
+	  if (curState.iStep<=NUM)
+	  {
+		  if(propagator_.DebugLevel>=1)
+			  sjc_debug::debug0(propagator_.DebugDepth,"ExpotentialMM");
+		  curState.curStep=ExpotentialMM;
+		  curState.stepSize=intScheme.deltaT*pow(0.5,NUM-curState.iStep);
+	  }
+	  else
+	  {
+		  if(propagator_.DebugLevel>=1)
+			  sjc_debug::debug0(propagator_.DebugDepth,"ModifiedMidpoint");
+		  curState.curStep=ModifiedMidpoint;
+		  curState.stepSize = 2. * intScheme.deltaT;
+	  }
+	  if (curState.iStep==0)
+	  {
+		  if(propagator_.DebugLevel>=1)
+			  sjc_debug::debug0(propagator_.DebugDepth,"ForwardEuler");
+		  curState.curStep=ForwardEuler;
+		  curState.stepSize=intScheme.deltaT*pow(0.5,NUM);
+	  }
 
-
-
+	  size_t NB = propagator_.aoints.basisSet().nBasis;
 
 
 
@@ -123,12 +148,15 @@ namespace ChronusQ {
         // DOSav(k) = DO(k)
         // DO(k)    = DO(k-1)
         for(auto i = 0; i < DOSav.size(); i++)
+		{
           Swap(memManager_.template getSize<dcomplex>(DOSav[i]),
             DOSav[i],1,propagator_.onePDMOrtho[i],1);
+		}
 
         curState.stepSize = 2. * intScheme.deltaT;
 
-      } else {
+      }
+	  else if( curState.curStep == ForwardEuler){
         // Save a copy of the SingleSlater density in the saved density
         // storage 
           
@@ -139,15 +167,20 @@ namespace ChronusQ {
             DOSav[i]);
 
      
-        curState.stepSize = intScheme.deltaT;
 
       }
+	  else if( curState.curStep == ExpotentialMM){
+
+        for(auto i = 0; i < DOSav.size(); i++)
+          std::copy_n(DOSav[i],
+            memManager_.template getSize<dcomplex>(DOSav[i]),
+            propagator_.onePDMOrtho[i]);
+	  }
 
 
 
 
 
-     
       // Form the Fock matrix at the current time
       formFock(false,curState.xTime);
 
@@ -170,11 +203,28 @@ namespace ChronusQ {
       // Orthonormalize the AO Fock matrix
       // F(k) -> FO(k)
       propagator_.ao2orthoFock();
+	  std::vector<size_t> cnpy_size={NB,NB};
+	  if (propagator_.DebugLevel>=2)
+		  for(size_t i=0;i<propagator_.fockMatrixOrtho.size();++i)
+		  {
+			  cnpy::npy_save("fockMatrixOrtho"+std::to_string(i)+"_"+std::to_string(curState.iStep)+".npy",propagator_.fockMatrixOrtho[i],cnpy_size,"w");
+			  sjc_debug::debug0(propagator_.DebugDepth,"fockMatrixOrtho saved");
+		  }
+
+
+     
+
 
 
       // Form the propagator from the orthonormal Fock matrix
       // FO(k) -> U**H(k) = exp(- i * dt * FO(k) )
       formPropagator();
+	  if (propagator_.DebugLevel>=2)
+		  for(size_t i=0;i<this->UH.size();++i)
+		  {
+			  cnpy::npy_save("UH"+std::to_string(i)+"_"+std::to_string(curState.iStep)+".npy",this->UH[i],cnpy_size,"w");
+			  sjc_debug::debug0(propagator_.DebugDepth,"UH saved");
+		  }
 
       // Propagator the orthonormal density matrix
       // DO (in propagator_) will now store DO(k+1)
@@ -189,6 +239,21 @@ namespace ChronusQ {
       // AO density ( delD = D(k+1) - D(k) ) 
       // ***
       propagateWFN();
+	  if (propagator_.DebugLevel>=2)
+		  for(size_t i=0;i<propagator_.onePDMOrtho.size();++i)
+		  {
+			  cnpy::npy_save("onePDMOrtho"+std::to_string(i)+"_"+std::to_string(curState.iStep)+".npy",propagator_.onePDMOrtho[i],cnpy_size,"w");
+			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
+		  }
+
+	  if (curState.iStep<=NUM)
+	  {
+		  curState.xTime = curState.stepSize;
+	  }
+	  else
+	  {
+		  curState.xTime += intScheme.deltaT;
+	  }
 
     } // Time loop
 

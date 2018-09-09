@@ -35,7 +35,8 @@ namespace ChronusQ {
   enum PropagationStep {
     ForwardEuler,
     ModifiedMidpoint,
-    ExplicitMagnus2
+    ExplicitMagnus2,
+	ExpotentialMM
   };
 
   enum PropagatorAlgorithm {
