@@ -51,7 +51,6 @@ namespace ChronusQ {
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::doPropagation() {
 
-	  size_t NUM=7;
     printRTHeader();
 
     bool Start(false); // Start the MMUT iterations
@@ -108,12 +107,12 @@ namespace ChronusQ {
 #endif
 
 */
-	  if (curState.iStep<=NUM)
+	  if (curState.iStep<=scaling_first)
 	  {
 		  if(propagator_.DebugLevel>=1)
 			  sjc_debug::debug0(propagator_.DebugDepth,"ExpotentialMM");
 		  curState.curStep=ExpotentialMM;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,NUM-curState.iStep);
+		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-curState.iStep);
 	  }
 	  else
 	  {
@@ -127,7 +126,7 @@ namespace ChronusQ {
 		  if(propagator_.DebugLevel>=1)
 			  sjc_debug::debug0(propagator_.DebugDepth,"ForwardEuler");
 		  curState.curStep=ForwardEuler;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,NUM);
+		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
 	  }
 
 	  size_t NB = propagator_.aoints.basisSet().nBasis;
@@ -246,7 +245,7 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
 		  }
 
-	  if (curState.iStep<=NUM)
+	  if (curState.iStep<=scaling_first)
 	  {
 		  curState.xTime = curState.stepSize;
 	  }

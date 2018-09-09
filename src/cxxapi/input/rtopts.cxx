@@ -38,7 +38,8 @@ namespace ChronusQ {
       "TMAX",
       "DELTAT",
       "IRSTRT",
-      "FIELD"
+      "FIELD",
+	  "SCALING"
     };
 
     // Specified keywords
@@ -122,6 +123,10 @@ namespace ChronusQ {
     // MMUT Restart
     OPTOPT(
       rt->intScheme.iRstrt = input.getData<size_t>("RT.IRSTRT");
+    )
+
+    OPTOPT(
+      rt->scaling_first = input.getData<size_t>("RT.SCALING");
     )
 
     // Handle field specification

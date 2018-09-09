@@ -96,6 +96,8 @@ namespace ChronusQ {
     IntegrationProgress curState;  ///< Current state of the time propagation
     IntegrationData     data;      ///< Data collection
 
+	size_t scaling_first=5;
+
     RealTimeBase()                     = delete;
     RealTimeBase(const RealTimeBase &) = delete;
     RealTimeBase(RealTimeBase &&)      = delete;
