@@ -44,6 +44,8 @@ namespace ChronusQ
 		std::string int_path;
 		PCMInput host_input;
 		pcmsolver_context_t* pcm_context;
+		size_t DebugLevel=0;
+		size_t DebugDepth=0;
 		size_t nB;
 		size_t num_ele=nB;
 		bool start_save=false;

@@ -57,6 +57,7 @@ namespace ChronusQ {
     bool FinMM(false); // Wrap up the MMUT iterations
 
     size_t NB = propagator_.aoints.basisSet().nBasis;
+	size_t true_irstrt=intScheme.iRstrt+this->scaling_first;
 
     for( curState.xTime = 0., curState.iStep = 0; 
          curState.xTime <= (intScheme.tMax + intScheme.deltaT/4); 
@@ -107,12 +108,19 @@ namespace ChronusQ {
 #endif
 
 */
-	  if (curState.iStep<=scaling_first)
+	  if (curState.iStep%true_irstrt==0)
+	  {
+		  if(propagator_.DebugLevel>=1)
+			  sjc_debug::debug0(propagator_.DebugDepth,"ForwardEuler");
+		  curState.curStep=ForwardEuler;
+		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
+	  }
+	  else if (curState.iStep%true_irstrt<=scaling_first)
 	  {
 		  if(propagator_.DebugLevel>=1)
 			  sjc_debug::debug0(propagator_.DebugDepth,"ExpotentialMM");
 		  curState.curStep=ExpotentialMM;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-curState.iStep);
+		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-curState.iStep%true_irstrt);
 	  }
 	  else
 	  {
@@ -120,13 +128,6 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"ModifiedMidpoint");
 		  curState.curStep=ModifiedMidpoint;
 		  curState.stepSize = 2. * intScheme.deltaT;
-	  }
-	  if (curState.iStep==0)
-	  {
-		  if(propagator_.DebugLevel>=1)
-			  sjc_debug::debug0(propagator_.DebugDepth,"ForwardEuler");
-		  curState.curStep=ForwardEuler;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
 	  }
 
 	  size_t NB = propagator_.aoints.basisSet().nBasis;
@@ -245,13 +246,13 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
 		  }
 
-	  if (curState.iStep<=scaling_first)
+	  if (curState.curStep == ForwardEuler)
 	  {
-		  curState.xTime = curState.stepSize;
+		  curState.xTime += curState.stepSize;
 	  }
 	  else
 	  {
-		  curState.xTime += intScheme.deltaT;
+		  curState.xTime += curState.stepSize/2;
 	  }
 
     } // Time loop
