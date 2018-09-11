@@ -116,6 +116,8 @@ namespace ChronusQ {
 	  {
 		  this->pcm->start_save=this->save_status;
 		  this->pcm->times=this->save_time;
+		  this->pcm->DebugDepth=this->DebugDepth;
+		  this->pcm->DebugLevel=this->DebugLevel;
 		  std::cout << std::setprecision(4);
 		  if(this->DebugLevel>=1)
 			  sjc_debug::debug0(this->DebugDepth,"PCM iteration begins");
@@ -134,7 +136,7 @@ namespace ChronusQ {
 			  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->fockMatrix[i],npy_size,"w");
 		  for(int i=0;i!=this->onePDM.size();++i)
 			  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->onePDM[i],npy_size,"w");
-		  if (this->DebugLevel>=1)
+		  if (this->DebugLevel>=0)
 			  sjc_debug::debug0(this->DebugDepth,"Fock and DM Saved");
 	  }
 	  if (this->save_status)
