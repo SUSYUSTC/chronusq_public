@@ -183,6 +183,8 @@ namespace ChronusQ {
 
       // Form the Fock matrix at the current time
       formFock(false,curState.xTime);
+	  if( curState.curStep == ExpotentialMM)
+		  propagator_.save_time--;
 
       // Compute properties for D(k) 
       propagator_.computeProperties(pert_t);
