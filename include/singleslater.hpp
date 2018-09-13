@@ -279,7 +279,7 @@ namespace ChronusQ {
     void scfDIIS(size_t);
 
 
-	virtual void swaporbit();
+	void swaporbit(std::pair<int,int>);
     // MO Transformations
     void MOFOCK();
 

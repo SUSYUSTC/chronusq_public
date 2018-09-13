@@ -36,6 +36,7 @@
 #include <singleslater/base/scf.hpp> 
 
 #include <ctime>
+#include <sjc_debug.hpp>
 
 namespace ChronusQ {
 
@@ -821,7 +822,7 @@ namespace ChronusQ {
   }
 
 	template<typename MatsT, typename IntsT>
-	void SingleSlater<MatsT,IntsT>::swaporbit() {
+	void SingleSlater<MatsT,IntsT>::swaporbit(std::pair<int,int> swap) {
 		if(this->nC==1)
 		{
 			typedef Eigen::Matrix<MatsT,-1,-1> Matrix;
@@ -849,9 +850,9 @@ namespace ChronusQ {
 					std::cout << MapRowMatrix(this->onePDMOrtho[i],NB,NB) << std::endl;
 				}
 			}
-			Eigen::Matrix<MatsT,1,-1> temprow=AMO.row(this->nOA-1);
-			AMO.row(this->nOA-1)=AMO.row(this->nOA);
-			AMO.row(this->nOA)=temprow;
+			Eigen::Matrix<MatsT,1,-1> temprow=AMO.row(this->nOA-1-swap.first);
+			AMO.row(this->nOA-1-swap.first)=AMO.row(this->nOA+swap.second);
+			AMO.row(this->nOA+swap.second)=temprow;
 			this->formDensity();
 			for(size_t i=0;i<this->onePDM.size();++i)
 				this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);

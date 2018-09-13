@@ -39,7 +39,8 @@ namespace ChronusQ {
       "DELTAT",
       "IRSTRT",
       "FIELD",
-	  "SCALING"
+	  "SCALING",
+	  "SWAP"
     };
 
     // Specified keywords
@@ -128,6 +129,25 @@ namespace ChronusQ {
     OPTOPT(
       rt->scaling_first = input.getData<size_t>("RT.SCALING");
     )
+
+
+	std::string swap_string;
+	OPTOPT(
+	  swap_string=input.getData<std::string>("RT.SWAP");
+	)
+	if(swap_string.empty())
+		;
+	else
+	{
+		std::vector<std::string> swap_tokens;
+		split(swap_tokens,swap_string);
+		if( swap_tokens.size() != 2 )
+			CErr(swap_string + "is not a valid SCF Field specification");
+		rt->is_swap=true;
+		rt->swap=std::make_pair<int,int>(std::stoi(swap_tokens[0]),std::stoi(swap_tokens[0]));
+	}
+
+
 
     // Handle field specification
     try {

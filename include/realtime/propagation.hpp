@@ -51,6 +51,15 @@ namespace ChronusQ {
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::doPropagation() {
 
+	if(this->is_swap)
+	{
+		if(propagator_.DebugLevel>=1)
+			sjc_debug::debugP(propagator_.DebugDepth,"doPropagation","swaporbit");
+		propagator_.swaporbit(this->swap);
+		if(propagator_.DebugLevel>=1)
+			sjc_debug::debugN(propagator_.DebugDepth,"doPropagation","swaporbit");
+	}
+
     printRTHeader();
 
     bool Start(false); // Start the MMUT iterations
@@ -180,24 +189,32 @@ namespace ChronusQ {
 
 
 
-
       // Form the Fock matrix at the current time
       formFock(false,curState.xTime);
 	  if( curState.curStep == ExpotentialMM)
 		  propagator_.save_time--;
 
-      // Compute properties for D(k) 
-      propagator_.computeProperties(pert_t);
-
-      data.Time.push_back(curState.xTime);
-      data.Energy.push_back(propagator_.totalEnergy);
-      data.ElecDipole.push_back(propagator_.elecDipole);
-      if( pert_t.fields.size() > 0 )
-      data.ElecDipoleField.push_back( pert_t.getDipoleAmp(Electric) );
 
 
-      // Print progress line in the output file
-      printRTStep();
+
+	  if(curState.curStep==ExpotentialMM and propagator_.DebugLevel==0)
+		  ;
+	  else
+	  {
+		  // Compute properties for D(k) 
+		  propagator_.computeProperties(pert_t);
+
+		  data.Time.push_back(curState.xTime);
+		  data.Energy.push_back(propagator_.totalEnergy);
+		  data.ElecDipole.push_back(propagator_.elecDipole);
+		  if( pert_t.fields.size() > 0 )
+		  data.ElecDipoleField.push_back( pert_t.getDipoleAmp(Electric) );
+
+
+		  // Print progress line in the output file
+		  printRTStep();
+	  }
+
 
 
 
@@ -248,6 +265,7 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
 		  }
 
+
 	  if (curState.curStep == ForwardEuler)
 	  {
 		  curState.xTime += curState.stepSize;
@@ -256,6 +274,8 @@ namespace ChronusQ {
 	  {
 		  curState.xTime += curState.stepSize/2;
 	  }
+
+
 
     } // Time loop
 

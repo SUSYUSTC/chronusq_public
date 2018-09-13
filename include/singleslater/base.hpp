@@ -258,7 +258,7 @@ namespace ChronusQ {
     // Perform an SCF procedure (see include/singleslater/scf.hpp for docs)
     void SCF(EMPerturbation &);
 	void initpcm(std::shared_ptr<PCMBase>);
-	virtual void swaporbit()=0;
+	virtual void swaporbit(std::pair<int,int>)=0;
 
   }; // class SingleSlaterBase
 

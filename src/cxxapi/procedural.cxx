@@ -224,7 +224,6 @@ namespace ChronusQ {
 
 			if( MPISize() > 1 ) CErr("RT + MPI NYI!",output);
 
-			ss->swaporbit();
 			ss->save_status=true;
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugP(ss->DebugDepth, "procedual", "doPropagation");
