@@ -166,14 +166,6 @@ namespace ChronusQ {
 
       }
 	  else if( curState.curStep == ForwardEuler){
-        // Save a copy of the SingleSlater density in the saved density
-        // storage 
-          
-        // DOSav(k) = DO(k)
-        for(auto i = 0; i < DOSav.size(); i++)
-          std::copy_n(propagator_.onePDMOrtho[i],
-            memManager_.template getSize<dcomplex>(DOSav[i]),
-            DOSav[i]);
 
      
 
@@ -189,6 +181,39 @@ namespace ChronusQ {
 
 
 
+
+	  if (curState.curStep == ForwardEuler)
+	  {
+		  curState.xTime += curState.stepSize;
+	  }
+	  else
+	  {
+		  curState.xTime += curState.stepSize/2;
+	  }
+
+
+
+    } // Time loop
+
+  //mathematicaPrint(std::cerr,"Dipole-X",&data.ElecDipole[0][0],
+  //  curState.iStep,1,curState.iStep,3);
+
+    if( savFile.exists() ) {
+      savFile.safeWriteData("RT/TIME",&data.Time[0],{data.Time.size()});
+      savFile.safeWriteData("RT/ENERGY",&data.Energy[0],{data.Time.size()});
+      savFile.safeWriteData("RT/LEN_ELEC_DIPOLE",&data.ElecDipole[0][0],
+        {data.Time.size(),3});
+
+      if( data.ElecDipoleField.size() > 0 )
+      savFile.safeWriteData("RT/LEN_ELEC_DIPOLE_FIELD",&data.ElecDipoleField[0][0],
+        {data.Time.size(),3});
+    }
+
+  }; // RealTime::doPropagation
+
+
+  template <template <typename, typename> class _SSTyp, typename IntsT>
+  void RealTime<_SSTyp,IntsT>::DoIteration(EMPerturbation& pert_t, bool print) {
       // Form the Fock matrix at the current time
       formFock(false,curState.xTime);
 	  if( curState.curStep == ExpotentialMM)
@@ -197,9 +222,7 @@ namespace ChronusQ {
 
 
 
-	  if(curState.curStep==ExpotentialMM and propagator_.DebugLevel==0)
-		  ;
-	  else
+	  if (print)
 	  {
 		  // Compute properties for D(k) 
 		  propagator_.computeProperties(pert_t);
@@ -265,37 +288,21 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
 		  }
 
-
-	  if (curState.curStep == ForwardEuler)
-	  {
-		  curState.xTime += curState.stepSize;
-	  }
-	  else
-	  {
-		  curState.xTime += curState.stepSize/2;
-	  }
-
-
-
-    } // Time loop
-
-  //mathematicaPrint(std::cerr,"Dipole-X",&data.ElecDipole[0][0],
-  //  curState.iStep,1,curState.iStep,3);
-
-    if( savFile.exists() ) {
-      savFile.safeWriteData("RT/TIME",&data.Time[0],{data.Time.size()});
-      savFile.safeWriteData("RT/ENERGY",&data.Energy[0],{data.Time.size()});
-      savFile.safeWriteData("RT/LEN_ELEC_DIPOLE",&data.ElecDipole[0][0],
-        {data.Time.size(),3});
-
-      if( data.ElecDipoleField.size() > 0 )
-      savFile.safeWriteData("RT/LEN_ELEC_DIPOLE_FIELD",&data.ElecDipoleField[0][0],
-        {data.Time.size(),3});
-    }
-
-  }; // RealTime::doPropagation
-
-
+  }
+  template <template <typename, typename> class _SSTyp, typename IntsT>
+  void RealTime<_SSTyp,IntsT>::DoStart(EMPerturbation& pert_t) {
+        // Save a copy of the SingleSlater density in the saved density
+        // storage 
+          
+        // DOSav(k) = DO(k)
+        for(auto i = 0; i < DOSav.size(); i++)
+          std::copy_n(propagator_.onePDMOrtho[i],
+            memManager_.template getSize<dcomplex>(DOSav[i]),
+            DOSav[i]);
+  }
+  template <template <typename, typename> class _SSTyp, typename IntsT>
+  void RealTime<_SSTyp,IntsT>::DoMM(EMPerturbation& pert_t) {
+  }
   /**
    *  \brief Form the adjoint of the unitary propagator
    *

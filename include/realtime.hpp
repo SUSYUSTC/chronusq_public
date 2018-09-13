@@ -192,6 +192,11 @@ namespace ChronusQ {
     void alloc();
     void dealloc();
 
+	//modify
+	void DoIteration(EMPerturbation&, bool);
+	void DoStart(EMPerturbation&);
+	void DoMM(EMPerturbation&);
+
   }; // class RealTime
   
 
