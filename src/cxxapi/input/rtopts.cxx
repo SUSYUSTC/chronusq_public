@@ -40,7 +40,8 @@ namespace ChronusQ {
       "IRSTRT",
       "FIELD",
 	  "SCALING",
-	  "SWAP"
+	  "SWAP",
+	  "START"
     };
 
     // Specified keywords
@@ -128,6 +129,9 @@ namespace ChronusQ {
 
     OPTOPT(
       rt->scaling_first = input.getData<size_t>("RT.SCALING");
+    )
+    OPTOPT(
+      rt->start_time = input.getData<size_t>("RT.START");
     )
 
 

@@ -50,14 +50,9 @@ namespace ChronusQ {
 
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::doPropagation() {
-
 	if(this->is_swap)
 	{
-		if(propagator_.DebugLevel>=1)
-			sjc_debug::debugP(propagator_.DebugDepth,"doPropagation","swaporbit");
 		propagator_.swaporbit(this->swap);
-		if(propagator_.DebugLevel>=1)
-			sjc_debug::debugN(propagator_.DebugDepth,"doPropagation","swaporbit");
 	}
 
     printRTHeader();
@@ -66,7 +61,6 @@ namespace ChronusQ {
     bool FinMM(false); // Wrap up the MMUT iterations
 
     size_t NB = propagator_.aoints.basisSet().nBasis;
-	size_t true_irstrt=intScheme.iRstrt+this->scaling_first;
 
     for( curState.xTime = 0., curState.iStep = 0; 
          curState.xTime <= (intScheme.tMax + intScheme.deltaT/4); 
@@ -117,81 +111,22 @@ namespace ChronusQ {
 #endif
 
 */
-	  if (curState.iStep%true_irstrt==0)
+
+
+	  if (curState.iStep%intScheme.iRstrt==0 or curState.iStep<this->start_time)
 	  {
 		  if(propagator_.DebugLevel>=1)
-			  sjc_debug::debug0(propagator_.DebugDepth,"ForwardEuler");
-		  curState.curStep=ForwardEuler;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
-	  }
-	  else if (curState.iStep%true_irstrt<=scaling_first)
-	  {
-		  if(propagator_.DebugLevel>=1)
-			  sjc_debug::debug0(propagator_.DebugDepth,"ExpotentialMM");
-		  curState.curStep=ExpotentialMM;
-		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-curState.iStep%true_irstrt);
+			  sjc_debug::debug0(propagator_.DebugDepth,"Start");
+		  this->DoStart(pert_t);
+		  curState.xTime += intScheme.deltaT;
 	  }
 	  else
 	  {
 		  if(propagator_.DebugLevel>=1)
 			  sjc_debug::debug0(propagator_.DebugDepth,"ModifiedMidpoint");
-		  curState.curStep=ModifiedMidpoint;
-		  curState.stepSize = 2. * intScheme.deltaT;
+		  this->DoMM(pert_t);
+		  curState.xTime += intScheme.deltaT;
 	  }
-
-	  size_t NB = propagator_.aoints.basisSet().nBasis;
-
-
-
-
-
-
-
-
-      // Handle density copies / swaps for the current step
-      //  + Determine the step size
-        
-      if( curState.curStep == ModifiedMidpoint ) {
-        // Swap the saved density with the SingleSlater density
-          
-        // DOSav(k) = DO(k)
-        // DO(k)    = DO(k-1)
-        for(auto i = 0; i < DOSav.size(); i++)
-		{
-          Swap(memManager_.template getSize<dcomplex>(DOSav[i]),
-            DOSav[i],1,propagator_.onePDMOrtho[i],1);
-		}
-
-        curState.stepSize = 2. * intScheme.deltaT;
-
-      }
-	  else if( curState.curStep == ForwardEuler){
-
-     
-
-      }
-	  else if( curState.curStep == ExpotentialMM){
-
-        for(auto i = 0; i < DOSav.size(); i++)
-          std::copy_n(DOSav[i],
-            memManager_.template getSize<dcomplex>(DOSav[i]),
-            propagator_.onePDMOrtho[i]);
-	  }
-
-
-
-
-
-	  if (curState.curStep == ForwardEuler)
-	  {
-		  curState.xTime += curState.stepSize;
-	  }
-	  else
-	  {
-		  curState.xTime += curState.stepSize/2;
-	  }
-
-
 
     } // Time loop
 
@@ -212,19 +147,18 @@ namespace ChronusQ {
   }; // RealTime::doPropagation
 
 
+
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::DoIteration(EMPerturbation& pert_t, bool print) {
+	  size_t NB = propagator_.aoints.basisSet().nBasis;
       // Form the Fock matrix at the current time
       formFock(false,curState.xTime);
-	  if( curState.curStep == ExpotentialMM)
-		  propagator_.save_time--;
-
 
 
 
 	  if (print)
 	  {
-		  // Compute properties for D(k) 
+      // Compute properties for D(k) 
 		  propagator_.computeProperties(pert_t);
 
 		  data.Time.push_back(curState.xTime);
@@ -239,9 +173,6 @@ namespace ChronusQ {
 	  }
 
 
-
-
-
       // Orthonormalize the AO Fock matrix
       // F(k) -> FO(k)
       propagator_.ao2orthoFock();
@@ -252,9 +183,6 @@ namespace ChronusQ {
 			  cnpy::npy_save("fockMatrixOrtho"+std::to_string(i)+"_"+std::to_string(curState.iStep)+".npy",propagator_.fockMatrixOrtho[i],cnpy_size,"w");
 			  sjc_debug::debug0(propagator_.DebugDepth,"fockMatrixOrtho saved");
 		  }
-
-
-     
 
 
 
@@ -288,21 +216,44 @@ namespace ChronusQ {
 			  sjc_debug::debug0(propagator_.DebugDepth,"onePDMOrtho saved");
 		  }
 
+
+  }
+
+  template <template <typename, typename> class _SSTyp, typename IntsT>
+  void RealTime<_SSTyp,IntsT>::DoMM(EMPerturbation& pert_t) {
+	  curState.curStep=ModifiedMidpoint;
+	  curState.stepSize = 2.0 * intScheme.deltaT;
+	  for(auto i = 0; i < DOSav.size(); i++)
+	  {
+		  Swap(memManager_.template getSize<dcomplex>(DOSav[i]),
+				  DOSav[i],1,propagator_.onePDMOrtho[i],1);
+	  }
+	  this->DoIteration(pert_t, true);
   }
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::DoStart(EMPerturbation& pert_t) {
-        // Save a copy of the SingleSlater density in the saved density
-        // storage 
-          
-        // DOSav(k) = DO(k)
-        for(auto i = 0; i < DOSav.size(); i++)
-          std::copy_n(propagator_.onePDMOrtho[i],
-            memManager_.template getSize<dcomplex>(DOSav[i]),
-            DOSav[i]);
+	  curState.curStep=ForwardEuler;
+	  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
+	  //Modify Save to current DM
+	  for(auto i = 0; i < DOSav.size(); i++)
+		  std::copy_n(propagator_.onePDMOrtho[i],
+				  memManager_.template getSize<dcomplex>(DOSav[i]),
+				  DOSav[i]);
+	  this->DoIteration(pert_t, true);
+	  for(size_t i=1;i<=scaling_first;++i)
+	  {
+		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-i);
+		  //Modify current DM to Save
+		  for(auto i = 0; i < DOSav.size(); i++)
+			  std::copy_n(DOSav[i],
+					  memManager_.template getSize<dcomplex>(DOSav[i]),
+					  propagator_.onePDMOrtho[i]);
+		  this->DoIteration(pert_t, false);
+		  propagator_.save_time--;
+	  }
   }
-  template <template <typename, typename> class _SSTyp, typename IntsT>
-  void RealTime<_SSTyp,IntsT>::DoMM(EMPerturbation& pert_t) {
-  }
+
+
   /**
    *  \brief Form the adjoint of the unitary propagator
    *
