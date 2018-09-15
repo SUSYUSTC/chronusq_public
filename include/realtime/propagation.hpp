@@ -50,10 +50,8 @@ namespace ChronusQ {
 
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::doPropagation() {
-	if(this->is_swap)
-	{
-		propagator_.swaporbit(this->swap);
-	}
+	if(this->is_swap_alpha or this->is_swap_beta)
+		propagator_.swaporbit(this->is_swap_alpha, this->is_swap_beta, this->swap_alpha, this->swap_beta);
 
     printRTHeader();
 

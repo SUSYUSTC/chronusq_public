@@ -97,8 +97,10 @@ namespace ChronusQ {
     IntegrationData     data;      ///< Data collection
 
 	size_t scaling_first=5;
-	bool is_swap=false;
-	std::pair<int,int> swap;
+	bool is_swap_alpha=false;
+	bool is_swap_beta=false;
+	std::pair<int,int> swap_alpha;
+	std::pair<int,int> swap_beta;
 	size_t start_time=0;
 
     RealTimeBase()                     = delete;

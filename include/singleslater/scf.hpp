@@ -822,7 +822,7 @@ namespace ChronusQ {
   }
 
 	template<typename MatsT, typename IntsT>
-	void SingleSlater<MatsT,IntsT>::swaporbit(std::pair<int,int> swap) {
+	void SingleSlater<MatsT,IntsT>::swaporbit(bool is_swap_alpha, bool is_swap_beta, std::pair<int,int> swap_alpha, std::pair<int,int> swap_beta) {
 		if(this->nC==1)
 		{
 			typedef Eigen::Matrix<MatsT,-1,-1> Matrix;
@@ -850,9 +850,19 @@ namespace ChronusQ {
 					std::cout << MapRowMatrix(this->onePDMOrtho[i],NB,NB) << std::endl;
 				}
 			}
-			Eigen::Matrix<MatsT,1,-1> temprow=AMO.row(this->nOA-1-swap.first);
-			AMO.row(this->nOA-1-swap.first)=AMO.row(this->nOA+swap.second);
-			AMO.row(this->nOA+swap.second)=temprow;
+			Eigen::Matrix<MatsT,1,-1> temprow;
+			if(is_swap_alpha)
+			{
+				temprow=AMO.row(this->nOA-1-swap_alpha.first);
+				AMO.row(this->nOA-1-swap_alpha.first)=AMO.row(this->nOA+swap_alpha.second);
+				AMO.row(this->nOA+swap_alpha.second)=temprow;
+			}
+			if(is_swap_beta)
+			{
+				temprow=BMO.row(this->nOB-1-swap_beta.first);
+				BMO.row(this->nOB-1-swap_beta.first)=BMO.row(this->nOB+swap_beta.second);
+				BMO.row(this->nOB+swap_beta.second)=temprow;
+			}
 			this->formDensity();
 			for(size_t i=0;i<this->onePDM.size();++i)
 				this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);

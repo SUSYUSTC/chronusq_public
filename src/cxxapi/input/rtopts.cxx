@@ -40,7 +40,8 @@ namespace ChronusQ {
       "IRSTRT",
       "FIELD",
 	  "SCALING",
-	  "SWAP",
+	  "SWAPALPHA",
+	  "SWAPBETA",
 	  "START"
     };
 
@@ -135,22 +136,38 @@ namespace ChronusQ {
     )
 
 
-	std::string swap_string;
+	std::string swap_string_alpha;
 	OPTOPT(
-	  swap_string=input.getData<std::string>("RT.SWAP");
+	  swap_string_alpha=input.getData<std::string>("RT.SWAPALPHA");
 	)
-	if(swap_string.empty())
+	if(swap_string_alpha.empty())
 		;
 	else
 	{
 		std::vector<std::string> swap_tokens;
-		split(swap_tokens,swap_string);
+		split(swap_tokens,swap_string_alpha);
 		if( swap_tokens.size() != 2 )
-			CErr(swap_string + "is not a valid SCF Field specification");
-		rt->is_swap=true;
-		rt->swap=std::make_pair<int,int>(std::stoi(swap_tokens[0]),std::stoi(swap_tokens[0]));
+			CErr(swap_string_alpha + "is not a valid SCF Field specification");
+		rt->is_swap_alpha=true;
+		rt->swap_alpha=std::make_pair<int,int>(std::stoi(swap_tokens[0]),std::stoi(swap_tokens[0]));
 	}
 
+
+	std::string swap_string_beta;
+	OPTOPT(
+	  swap_string_beta=input.getData<std::string>("RT.SWAPBETA");
+	)
+	if(swap_string_beta.empty())
+		;
+	else
+	{
+		std::vector<std::string> swap_tokens;
+		split(swap_tokens,swap_string_beta);
+		if( swap_tokens.size() != 2 )
+			CErr(swap_string_beta + "is not a valid SCF Field specification");
+		rt->is_swap_beta=true;
+		rt->swap_beta=std::make_pair<int,int>(std::stoi(swap_tokens[0]),std::stoi(swap_tokens[0]));
+	}
 
 
     // Handle field specification

@@ -89,7 +89,7 @@ COMPLEX_GTO	/mnt/HD/software/chronusq_public/include/basisset/basisset_def.hpp	/
 CONSTRUCT_MOR	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	325;"	d	file:
 CONSTRUCT_PH_RESP	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	299;"	d	file:
 CONSTRUCT_PP_RESP	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	312;"	d	file:
-CONSTRUCT_RT	/mnt/HD/software/chronusq_public/src/cxxapi/input/rtopts.cxx	89;"	d	file:
+CONSTRUCT_RT	/mnt/HD/software/chronusq_public/src/cxxapi/input/rtopts.cxx	91;"	d	file:
 CONTRACTION_ALGORITHM	/mnt/HD/software/chronusq_public/include/aointegrals.hpp	/^  enum CONTRACTION_ALGORITHM {$/;"	g	namespace:ChronusQ
 COPY_OTHER_MEMBER	/mnt/HD/software/chronusq_public/include/util/preprocessor.hpp	50;"	d
 COPY_OTHER_MEMBER_OP	/mnt/HD/software/chronusq_public/include/util/preprocessor.hpp	51;"	d
@@ -371,6 +371,9 @@ Dict	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/ex
 Dict	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^class Dict(TokenConverter):$/;"	c
 DifferentiableFunction	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Stencils.hpp	/^    DifferentiableFunction;$/;"	t
 DipoleE1	/mnt/HD/software/chronusq_public/src/aointegrals/aointegrals_onee_real_gto.cxx	/^  double RealGTOIntEngine::DipoleE1( $/;"	f	class:ChronusQ::RealGTOIntEngine
+DoIteration	/mnt/HD/software/chronusq_public/include/realtime/propagation.hpp	/^  void RealTime<_SSTyp,IntsT>::DoIteration(EMPerturbation& pert_t, bool print) {$/;"	f	class:ChronusQ::RealTime
+DoMM	/mnt/HD/software/chronusq_public/include/realtime/propagation.hpp	/^  void RealTime<_SSTyp,IntsT>::DoMM(EMPerturbation& pert_t) {$/;"	f	class:ChronusQ::RealTime
+DoStart	/mnt/HD/software/chronusq_public/include/realtime/propagation.hpp	/^  void RealTime<_SSTyp,IntsT>::DoStart(EMPerturbation& pert_t) {$/;"	f	class:ChronusQ::RealTime
 DocoptExit	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^class DocoptExit(SystemExit):$/;"	c
 DocoptLanguageError	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/external/docopt.py	/^class DocoptLanguageError(Exception):$/;"	c
 EBohrPerDebye	/mnt/HD/software/chronusq_public/include/physcon.hpp	/^  constexpr double EBohrPerDebye = 0.393430307;$/;"	m	namespace:ChronusQ
@@ -2568,7 +2571,8 @@ is_required	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmso
 is_set	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_set(self):$/;"	m	class:Keyword
 is_set	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_set(self, key=None):$/;"	m	class:Section
 is_stored	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool is_stored=false;$/;"	m	class:ChronusQ::PCMBase
-is_swap	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	bool is_swap=false;$/;"	m	struct:ChronusQ::RealTimeBase
+is_swap_alpha	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	bool is_swap_alpha=false;$/;"	m	struct:ChronusQ::RealTimeBase
+is_swap_beta	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	bool is_swap_beta=false;$/;"	m	struct:ChronusQ::RealTimeBase
 is_type	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def is_type(self, typ):$/;"	m	class:Keyword
 isotropic_	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/solver/ISolver.hpp	/^  bool isotropic_;$/;"	m	class:pcm::ISolver
 isscalar	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/external/libtaylor/ctaylor.hpp	/^  int isscalar; \/\/ If isscalar the only c[0] is defined.$/;"	m	struct:ctaylor
@@ -3526,6 +3530,7 @@ srange	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/
 sstack	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/getkw/Getkw.h	/^  std::stack<const Section *> sstack;$/;"	m	class:Getkw
 starOrb	/mnt/HD/software/chronusq_public/include/response/particleparticle.hpp	/^    std::pair<long int, long int> starOrb;             \/\/ Orbitals for *-ref$/;"	m	struct:ChronusQ::SingleSlaterParticleParticleBase
 start_save	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool start_save=false;$/;"	m	class:ChronusQ::PCMBase
+start_time	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	size_t start_time=0;$/;"	m	struct:ChronusQ::RealTimeBase
 status	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/getkw.py	/^    def status(self):$/;"	m	class:Section
 stepSize	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^    double  stepSize;   \/\/\/< Current step size$/;"	m	struct:ChronusQ::IntegrationProgress
 store	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		bool store=false;\/\/whether to store the matrix$/;"	m	class:ChronusQ::PCMBase
@@ -3551,8 +3556,9 @@ suppress	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolve
 suppress	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/pyparsing.py	/^    def suppress(self):$/;"	m	class:Suppress
 surc	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surc;\/\/surface charge$/;"	m	class:ChronusQ::PCMBase
 surp	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surp;\/\/surface potential$/;"	m	class:ChronusQ::PCMBase
-swap	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	std::pair<int,int> swap;$/;"	m	struct:ChronusQ::RealTimeBase
-swaporbit	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^	void SingleSlater<MatsT,IntsT>::swaporbit(std::pair<int,int> swap) {$/;"	f	class:ChronusQ::SingleSlater
+swap_alpha	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	std::pair<int,int> swap_alpha;$/;"	m	struct:ChronusQ::RealTimeBase
+swap_beta	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	std::pair<int,int> swap_beta;$/;"	m	struct:ChronusQ::RealTimeBase
+swaporbit	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^	void SingleSlater<MatsT,IntsT>::swaporbit(std::pair<int,int> swap_alpha, std::pair<int,int> swap_beta) {$/;"	f	class:ChronusQ::SingleSlater
 symbol	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Atom.hpp	/^  std::string symbol;$/;"	m	struct:pcm::utils::Atom
 symmetryBlocking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryBlocking(Eigen::MatrixXd & matrix,$/;"	f	namespace:pcm::utils
 symmetryPacking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryPacking(std::vector<Eigen::MatrixXd> & blockedMatrix,$/;"	f	namespace:pcm::utils

@@ -22,3 +22,7 @@ external/libxc/tmp
 doc
 *.*.swp
 *~
+include/tags
+src/tags
+src/pcm/tags
+src/cxxapi/tags
