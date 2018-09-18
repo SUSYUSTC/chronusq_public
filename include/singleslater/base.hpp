@@ -259,6 +259,8 @@ namespace ChronusQ {
     void SCF(EMPerturbation &);
 	void initpcm(std::shared_ptr<PCMBase>);
 	virtual void swaporbit(bool, bool, std::pair<int,int>, std::pair<int,int>)=0;
+	virtual	void readpdm()=0;
+	virtual void savenpy(std::string)=0;
 
   }; // class SingleSlaterBase
 

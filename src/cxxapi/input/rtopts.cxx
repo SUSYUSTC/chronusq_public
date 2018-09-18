@@ -42,7 +42,8 @@ namespace ChronusQ {
 	  "SCALING",
 	  "SWAPALPHA",
 	  "SWAPBETA",
-	  "START"
+	  "START",
+	  "RESTART"
     };
 
     // Specified keywords
@@ -168,6 +169,7 @@ namespace ChronusQ {
 		rt->is_swap_beta=true;
 		rt->swap_beta=std::make_pair<int,int>(std::stoi(swap_tokens[0]),std::stoi(swap_tokens[0]));
 	}
+
 
 
     // Handle field specification

@@ -89,7 +89,7 @@ COMPLEX_GTO	/mnt/HD/software/chronusq_public/include/basisset/basisset_def.hpp	/
 CONSTRUCT_MOR	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	325;"	d	file:
 CONSTRUCT_PH_RESP	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	299;"	d	file:
 CONSTRUCT_PP_RESP	/mnt/HD/software/chronusq_public/src/cxxapi/input/respopts.cxx	312;"	d	file:
-CONSTRUCT_RT	/mnt/HD/software/chronusq_public/src/cxxapi/input/rtopts.cxx	91;"	d	file:
+CONSTRUCT_RT	/mnt/HD/software/chronusq_public/src/cxxapi/input/rtopts.cxx	92;"	d	file:
 CONTRACTION_ALGORITHM	/mnt/HD/software/chronusq_public/include/aointegrals.hpp	/^  enum CONTRACTION_ALGORITHM {$/;"	g	namespace:ChronusQ
 COPY_OTHER_MEMBER	/mnt/HD/software/chronusq_public/include/util/preprocessor.hpp	50;"	d
 COPY_OTHER_MEMBER_OP	/mnt/HD/software/chronusq_public/include/util/preprocessor.hpp	51;"	d
@@ -3288,6 +3288,7 @@ range	/mnt/HD/software/chronusq_public/external/pcmsolver/lib/python/pcmsolver/p
 rank	/mnt/HD/software/chronusq_public/include/util/mpi.hpp	/^    static inline int rank() { return 0; }$/;"	f	struct:ChronusQ::MPI_Comm
 rcomm_	/mnt/HD/software/chronusq_public/include/response/tbase.hpp	/^    MPI_Comm      rcomm_;$/;"	m	class:ChronusQ::ResponseTBase
 readData	/mnt/HD/software/chronusq_public/include/util/files.hpp	/^      void readData(const std::string &dataSet, T* data) {$/;"	f	class:ChronusQ::SafeFile
+readpdm	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^	void SingleSlater<MatsT,IntsT>::readpdm(){$/;"	f	class:ChronusQ::SingleSlater
 ref	/mnt/HD/software/chronusq_public/include/response/tbase.hpp	/^    std::shared_ptr<Reference> ref() { return ref_; };$/;"	f	class:ChronusQ::ResponseRefBase
 refLongName_	/mnt/HD/software/chronusq_public/include/singleslater/base.hpp	/^    std::string refLongName_;  \/\/\/< Long form of the reference name$/;"	m	class:ChronusQ::SingleSlaterBase
 refShells	/mnt/HD/software/chronusq_public/include/basisset/reference.hpp	/^    std::unordered_map<int,ReferenceShell> refShells; $/;"	m	class:ChronusQ::ReferenceBasisSet
@@ -3558,7 +3559,7 @@ surc	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surc;\
 surp	/mnt/HD/software/chronusq_public/include/pcm.hpp	/^		Eigen::VectorXd surp;\/\/surface potential$/;"	m	class:ChronusQ::PCMBase
 swap_alpha	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	std::pair<int,int> swap_alpha;$/;"	m	struct:ChronusQ::RealTimeBase
 swap_beta	/mnt/HD/software/chronusq_public/include/realtime.hpp	/^	std::pair<int,int> swap_beta;$/;"	m	struct:ChronusQ::RealTimeBase
-swaporbit	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^	void SingleSlater<MatsT,IntsT>::swaporbit(std::pair<int,int> swap_alpha, std::pair<int,int> swap_beta) {$/;"	f	class:ChronusQ::SingleSlater
+swaporbit	/mnt/HD/software/chronusq_public/include/singleslater/scf.hpp	/^	void SingleSlater<MatsT,IntsT>::swaporbit(bool is_swap_alpha, bool is_swap_beta, std::pair<int,int> swap_alpha, std::pair<int,int> swap_beta) {$/;"	f	class:ChronusQ::SingleSlater
 symbol	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/Atom.hpp	/^  std::string symbol;$/;"	m	struct:pcm::utils::Atom
 symmetryBlocking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryBlocking(Eigen::MatrixXd & matrix,$/;"	f	namespace:pcm::utils
 symmetryPacking	/mnt/HD/software/chronusq_public/external/pcmsolver/include/PCMSolver/utils/MathUtils.hpp	/^inline void symmetryPacking(std::vector<Eigen::MatrixXd> & blockedMatrix,$/;"	f	namespace:pcm::utils

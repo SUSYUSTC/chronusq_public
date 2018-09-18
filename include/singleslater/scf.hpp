@@ -37,6 +37,7 @@
 
 #include <ctime>
 #include <sjc_debug.hpp>
+#include <cnpy.h>
 
 namespace ChronusQ {
 
@@ -884,28 +885,40 @@ namespace ChronusQ {
 					std::cout << MapRowMatrix(this->onePDMOrtho[i],NB,NB) << std::endl;
 				}
 			}
-			/*
-			Eigen::Matrix<MatsT,-1,-1> BMO=Eigen::Map<Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor>>(this->mo2,NB,NB);
-			Eigen::Matrix<MatsT,-1,-1> contracted_AMO(this->nOA,NB);
-			contracted_AMO=AMO.block(0,0,this->nOA,NB);
-			contracted_AMO.row(nOA)=AMO.row(nOA+1);
-			Eigen::Matrix<MatsT,-1,-1> contracted_BMO(this->nOB,NB);
-			contracted_BMO=BMO.block(0,0,this->nOB,NB);
-			Eigen::Matrix<MatsT,-1,-1> ADM=contracted_AMO.adjoint()*contracted_AMO;
-			Eigen::Matrix<MatsT,-1,-1> BDM=contracted_BMO.adjoint()*contracted_BMO;
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMs(this->onePDM[0],NB,NB);
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMz(this->onePDM[1],NB,NB);
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMorthos(this->onePDMOrtho[0],NB,NB);
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1>> PDMorthoz(this->onePDMOrtho[1],NB,NB);
-			Eigen::Map<Eigen::Matrix<MatsT,-1,-1,Eigen::RowMajor>> ortho(this->ortho2,NB,NB);
-			PDMs=ADM+BDM;
-			PDMz=ADM-BDM;
-			PDMorthos=ortho.transpose()*PDMs*ortho;
-			PDMorthoz=ortho.transpose()*PDMz*ortho;
-			*/
 		}
 	}
 
+	template<typename MatsT, typename IntsT>
+	void SingleSlater<MatsT,IntsT>::readpdm(){
+		size_t NB = this->aoints.basisSet().nBasis;
+		size_t size=this->onePDM.size();
+		for(size_t i=0;i<size;++i)
+		{
+			if(this->DebugLevel>=1)
+				sjc_debug::debug0(this->DebugDepth,"Loading "+std::to_string(int(i)));
+			std::string path="restart_"+std::to_string(int(i))+".npy";
+			cnpy::NpyArray arr=cnpy::npy_load(path);
+			MatsT* data=arr.data<MatsT>();
+			for(size_t j=0;j<NB*NB;++j)
+				this->onePDM[i][j]=data[j];
+			this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);
+			//TODO: memery leak here
+			if(this->DebugLevel>=1)
+				sjc_debug::debug0(this->DebugDepth,"Loading "+std::to_string(i)+" Done");
+		}
+	}
+	template<typename MatsT, typename IntsT>
+	void SingleSlater<MatsT,IntsT>::savenpy(std::string word){
+
+		size_t NB = this->aoints.basisSet().nBasis;
+		std::vector<size_t> npy_size={NB,NB};
+		for(int i=0;i!=this->fockMatrix.size();++i)
+			cnpy::npy_save("Fock"+std::to_string(i)+"_"+word+".npy",this->fockMatrix[i],npy_size,"w");
+		for(int i=0;i!=this->onePDM.size();++i)
+			cnpy::npy_save("DM"+std::to_string(i)+"_"+word+".npy",this->onePDM[i],npy_size,"w");
+		if (this->DebugLevel>=0)
+			sjc_debug::debug0(this->DebugDepth,"Fock and DM Saved");
+	}
 
 }; // namespace ChronusQ
 

@@ -60,6 +60,7 @@ namespace ChronusQ {
     EMPerturbation &pert, bool increment, double xHFX) {
 
     size_t NB = this->aoints.basisSet().nBasis;
+	std::vector<size_t> npy_size={NB,NB};
     size_t NB2 = NB*NB;
 
     auto GDStart = tick(); // Start time for G[D]
@@ -111,7 +112,6 @@ namespace ChronusQ {
 		sjc_debug::debug0(this->DebugDepth,"field contribute to fock");
 
 	  //PCM
-	  std::vector<size_t> npy_size={NB,NB};
 	  if(this->pcm!=nullptr and this->pcm->use_PCM)
 	  {
 		  this->pcm->start_save=this->save_status;
@@ -132,12 +132,7 @@ namespace ChronusQ {
 	  }
 	  if (this->save_status and (this->save_time%this->save_step)==0)
 	  {
-		  for(int i=0;i!=this->fockMatrix.size();++i)
-			  cnpy::npy_save("Fock"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->fockMatrix[i],npy_size,"w");
-		  for(int i=0;i!=this->onePDM.size();++i)
-			  cnpy::npy_save("DM"+std::to_string(i)+"_"+std::to_string(this->save_time)+".npy",this->onePDM[i],npy_size,"w");
-		  if (this->DebugLevel>=0)
-			  sjc_debug::debug0(this->DebugDepth,"Fock and DM Saved");
+		  this->savenpy(std::to_string(this->save_time));
 	  }
 	  if (this->save_status)
 	  {

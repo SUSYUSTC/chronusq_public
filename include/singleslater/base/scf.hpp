@@ -118,6 +118,7 @@ namespace ChronusQ {
       this->printSpin(std::cout);
       this->printMiscProperties(std::cout);
     }
+	this->savenpy("SCF");
     
   }; // SingleSlaterBase::SCF()
 

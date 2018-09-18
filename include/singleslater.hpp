@@ -280,6 +280,8 @@ namespace ChronusQ {
 
 
 	void swaporbit(bool, bool, std::pair<int,int>, std::pair<int,int>);
+	void readpdm();
+	void savenpy(std::string);
     // MO Transformations
     void MOFOCK();
 

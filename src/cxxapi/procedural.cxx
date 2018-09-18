@@ -174,7 +174,7 @@ namespace ChronusQ {
 
 
 		if( not jobType.compare("SCF") or not jobType.compare("RT") or 
-				not jobType.compare("RESP") ) {
+				not jobType.compare("RESP") or not jobType.compare("RESTARTRT")) {
 
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugP(ss->DebugDepth, "procedual", "formCoreH");
@@ -192,11 +192,7 @@ namespace ChronusQ {
 					sjc_debug::debugN(ss->DebugDepth, "procedual", "computeERI");
 			}
 
-			if(ss->DebugLevel>=1)
-				sjc_debug::debugP(ss->DebugDepth, "procedual", "formGuess");
-			ss->formGuess();
-			if(ss->DebugLevel>=1)
-				sjc_debug::debugN(ss->DebugDepth, "procedual", "formGuess");
+
 			std::cout << "PCM Initialization starts" << std::endl;
 			std::shared_ptr<PCMBase> pcm=std::make_shared<PCMBase>(input,basis);
 			if (pcm->use_PCM)
@@ -211,16 +207,26 @@ namespace ChronusQ {
 			}
 			ss->initpcm(pcm);
 
-			if(ss->DebugLevel>=1)
-				sjc_debug::debugP(ss->DebugDepth, "procedual", "SCF");
-			ss->SCF(emPert);
-			if(ss->DebugLevel>=1)
-				sjc_debug::debugN(ss->DebugDepth, "procedual", "SCF");
+
+			if(jobType.compare("RESTARTRT"))
+			{
+				if(ss->DebugLevel>=1)
+					sjc_debug::debugP(ss->DebugDepth, "procedual", "formGuess");
+				ss->formGuess();
+				if(ss->DebugLevel>=1)
+					sjc_debug::debugN(ss->DebugDepth, "procedual", "formGuess");
+
+				if(ss->DebugLevel>=1)
+					sjc_debug::debugP(ss->DebugDepth, "procedual", "SCF");
+				ss->SCF(emPert);
+				if(ss->DebugLevel>=1)
+					sjc_debug::debugN(ss->DebugDepth, "procedual", "SCF");
+			}
 		}
 
 
 
-		if( not jobType.compare("RT") ) {
+		if( not jobType.compare("RT") or not jobType.compare("RESTARTRT")) {
 
 			if( MPISize() > 1 ) CErr("RT + MPI NYI!",output);
 
@@ -228,6 +234,10 @@ namespace ChronusQ {
 			if(ss->DebugLevel>=1)
 				sjc_debug::debugP(ss->DebugDepth, "procedual", "doPropagation");
 			auto rt = CQRealTimeOptions(output,input,ss);
+			if (not jobType.compare("RESTARTRT"))
+			{
+				rt->restart=true;
+			}
 			rt->savFile = rstFile;
 			rt->doPropagation();
 			if(ss->DebugLevel>=1)

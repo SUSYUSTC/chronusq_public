@@ -134,6 +134,9 @@ namespace ChronusQ {
 
     CQMemManager     &memManager_; ///< Memory manager
 
+  public:
+	bool restart=false;
+
   };
 
 
