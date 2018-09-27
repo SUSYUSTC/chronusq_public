@@ -96,12 +96,14 @@ namespace ChronusQ {
     IntegrationProgress curState;  ///< Current state of the time propagation
     IntegrationData     data;      ///< Data collection
 
-	size_t scaling_first=5;
+	//BEGIN: Added by Jiace
+	size_t scaling_first=5;//Corresponds to the keyword RT.SCALING
 	bool is_swap_alpha=false;
 	bool is_swap_beta=false;
-	std::pair<int,int> swap_alpha;
+	std::pair<int,int> swap_alpha;//See definitions of two values in comments.txt
 	std::pair<int,int> swap_beta;
 	size_t start_time=0;
+	//END: Added by Jiace
 
     RealTimeBase()                     = delete;
     RealTimeBase(const RealTimeBase &) = delete;

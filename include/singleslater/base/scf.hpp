@@ -93,6 +93,7 @@ namespace ChronusQ {
 
     // Compute initial properties
     this->computeProperties(pert);
+	//Added by Jiace, calculate the pcm solver
 	if(this->pcm!=nullptr and this->pcm->use_PCM)
 		this->totalEnergy+=this->pcm->computeEnergy();
 

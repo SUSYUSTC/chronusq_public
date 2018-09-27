@@ -36,7 +36,6 @@ namespace ChronusQ {
     ForwardEuler,
     ModifiedMidpoint,
     ExplicitMagnus2,
-	ExpotentialMM
   };
 
   enum PropagatorAlgorithm {

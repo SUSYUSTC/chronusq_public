@@ -39,43 +39,46 @@ namespace ChronusQ
 	{
 	public:
 		bool use_PCM=false;
-		bool store=false;//whether to store the matrix
+		bool store=false;//whether to store the matrix from surface charge to fock matrix, which is also the matrix from density matrix to electronic potential
 		bool is_stored=false;
 		std::string int_path;
-		PCMInput host_input;
-		pcmsolver_context_t* pcm_context;
+		PCMInput host_input;//Interface of pcmsolver
+		pcmsolver_context_t* pcm_context;//Interface of pcmsolver
 		size_t DebugLevel=0;
 		size_t DebugDepth=0;
 		size_t nB;
-		size_t num_ele=nB;
+		size_t num_ele=nB;//number of elements, seems that it's wrong, but this variable will be updated during initialize
 		bool start_save=false;
-		size_t times=0;
-		size_t savestep=100;
-		int grid_size;
-		Eigen::Matrix3Xd grid;
-		Eigen::VectorXd nucp;//nuclear potential
+		size_t times=0;//when times%savetep==0, surface potential and surface charge will be saved
+		size_t savestep=100;//default is to save every 100 steps
+		int grid_size;//num of grids
+		Eigen::Matrix3Xd grid;//coordinates of grids
+		Eigen::VectorXd nucp;//surface potential contributed by nuclei
 		Eigen::VectorXd surp;//surface potential
 		Eigen::VectorXd surc;//surface charge
-		double* ints;
+		double* ints;//the matrix from potential to fock matrix
 		double* pcmfock;
 		PCMBase();
 		PCMBase(CQInputFile& input, BasisSet& basisset);
 		void initialize(CQMemManager& mem,const Molecule& molecule);
 		friend std::ostream& operator<< (std::ostream& os, const PCMBase pcmbase);
+		//calculate the fock matrix contributed by point charge
 		double* PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center);
+		//calcualte the pcm fock matrix
 		void formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset);
+		//calculate the matrix from surface potential to fock matrix
 		void storeFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset);
 		Eigen::RowVectorXd convert_double(Eigen::RowVectorXcd vec);
 		Eigen::RowVectorXd convert_double(Eigen::RowVectorXd vec);
-		//template<class MatsT>
-		//void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset);
+		//calculate the surface charge
 		void formcharge();
-		//template<class MatsT>
-		//MatsT* addFock(double* fock1, MatsT* fock2);
+		//calculate the surface potential
 		template<class MatsT>
 		void formpotential(CQMemManager& mem, MatsT* PDM, EMPerturbation& perb, BasisSet& basisset);
+		//add pcm fock to total fock
 		template<class MatsT>
 		void addFock(MatsT* fock);
+		//calcualte the energy contributed by pcm
 		double computeEnergy();
 	};
 }

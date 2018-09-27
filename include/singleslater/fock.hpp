@@ -111,9 +111,10 @@ namespace ChronusQ {
 	if(this->DebugLevel>=2)
 		sjc_debug::debug0(this->DebugDepth,"field contribute to fock");
 
-	  //PCM
+	  //PCM, added by Jiace
 	  if(this->pcm!=nullptr and this->pcm->use_PCM)
 	  {
+		  //start_save and save_status are activated in RT, but no in SCF
 		  this->pcm->start_save=this->save_status;
 		  this->pcm->times=this->save_time;
 		  this->pcm->DebugDepth=this->DebugDepth;
@@ -121,10 +122,14 @@ namespace ChronusQ {
 		  std::cout << std::setprecision(4);
 		  if(this->DebugLevel>=1)
 			  sjc_debug::debug0(this->DebugDepth,"PCM iteration begins");
+		  //calculate the surface potential
 		  this->pcm->formpotential(this->aoints.memManager_,this->onePDM[0],pert,this->aoints.basisSet_);
+		  //calculate the surface charge
 		  this->pcm->formcharge();
 		  //std::cout << "formFock starts" << std::endl;
+		  //calculate the pcm fock matrix
 		  this->pcm->formFock(this->aoints.memManager_,pert,this->aoints.basisSet_);
+		  //add it to total fock matrix
 		  this->pcm->addFock(this->fockMatrix[0]);
 		  if(this->DebugLevel>=1)
 			  sjc_debug::debug0(this->DebugDepth,"PCM iteration ends");
@@ -132,6 +137,7 @@ namespace ChronusQ {
 	  }
 	  if (this->save_status and (this->save_time%this->save_step)==0)
 	  {
+		  //Save Density Matrix and Fock Matrix
 		  this->savenpy(std::to_string(this->save_time));
 	  }
 	  if (this->save_status)

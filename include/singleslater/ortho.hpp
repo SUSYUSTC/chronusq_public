@@ -159,6 +159,7 @@ namespace ChronusQ {
    *  AOIntegrals::computeOrtho for details).
    *
    */ 
+  //Added by Jiace
   template <typename MatsT, typename IntsT>
   template <typename TT> 
   void SingleSlater<MatsT,IntsT>::Ortho2TransT(TT* A, TT* TransA) {

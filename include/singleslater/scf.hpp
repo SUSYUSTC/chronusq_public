@@ -822,6 +822,7 @@ namespace ChronusQ {
     this->memManager.free(SCR,SCR2);
   }
 
+  //Added by Jiace
 	template<typename MatsT, typename IntsT>
 	void SingleSlater<MatsT,IntsT>::swaporbit(bool is_swap_alpha, bool is_swap_beta, std::pair<int,int> swap_alpha, std::pair<int,int> swap_beta) {
 		if(this->nC==1)
@@ -833,6 +834,7 @@ namespace ChronusQ {
 			size_t NB = this->aoints.basisSet().nBasis;
 			MapRowMatrix AMO(this->mo1,NB,NB);
 			MapRowMatrix BMO(this->mo2,NB,NB);
+			//debug info
 			if(this->DebugLevel>=2)
 			{
 				std::cout << "before change" << std::endl;
@@ -854,19 +856,24 @@ namespace ChronusQ {
 			Eigen::Matrix<MatsT,1,-1> temprow;
 			if(is_swap_alpha)
 			{
+				//swap two rows
 				temprow=AMO.row(this->nOA-1-swap_alpha.first);
 				AMO.row(this->nOA-1-swap_alpha.first)=AMO.row(this->nOA+swap_alpha.second);
 				AMO.row(this->nOA+swap_alpha.second)=temprow;
 			}
 			if(is_swap_beta)
 			{
+				//swap two rows
 				temprow=BMO.row(this->nOB-1-swap_beta.first);
 				BMO.row(this->nOB-1-swap_beta.first)=BMO.row(this->nOB+swap_beta.second);
 				BMO.row(this->nOB+swap_beta.second)=temprow;
 			}
+			//get Density Matrix in contracted gaussian basis from MO
 			this->formDensity();
+			//get Density Matrix in orthogonal basis from that in contracted gaussian basis
 			for(size_t i=0;i<this->onePDM.size();++i)
 				this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);
+			//debug info
 			if(this->DebugLevel>=2)
 			{
 				std::cout << "after change" << std::endl;
@@ -888,6 +895,8 @@ namespace ChronusQ {
 		}
 	}
 
+	//Added by Jiace
+	//try to read file restart_k.npy to the kth Density Matrix
 	template<typename MatsT, typename IntsT>
 	void SingleSlater<MatsT,IntsT>::readpdm(){
 		size_t NB = this->aoints.basisSet().nBasis;
@@ -901,19 +910,23 @@ namespace ChronusQ {
 			MatsT* data=arr.data<MatsT>();
 			for(size_t j=0;j<NB*NB;++j)
 				this->onePDM[i][j]=data[j];
+			//calculate PDM in orthogonal basis from that in contracted gaussian basis
 			this->Ortho2TransT(this->onePDM[i],this->onePDMOrtho[i]);
 			//TODO: memery leak here
 			if(this->DebugLevel>=1)
 				sjc_debug::debug0(this->DebugDepth,"Loading "+std::to_string(i)+" Done");
 		}
 	}
+	//Added by Jiace
 	template<typename MatsT, typename IntsT>
 	void SingleSlater<MatsT,IntsT>::savenpy(std::string word){
 
 		size_t NB = this->aoints.basisSet().nBasis;
 		std::vector<size_t> npy_size={NB,NB};
+		//save fock matrix
 		for(int i=0;i!=this->fockMatrix.size();++i)
 			cnpy::npy_save("Fock"+std::to_string(i)+"_"+word+".npy",this->fockMatrix[i],npy_size,"w");
+		//save density matrix
 		for(int i=0;i!=this->onePDM.size();++i)
 			cnpy::npy_save("DM"+std::to_string(i)+"_"+word+".npy",this->onePDM[i],npy_size,"w");
 		if (this->DebugLevel>=0)

@@ -229,7 +229,7 @@ namespace ChronusQ {
     template <typename TT> void Ortho1Trans(TT* A, TT* TransA); 
     template <typename TT> void Ortho2Trans(TT* A, TT* TransA); 
     template <typename TT> void Ortho1TransT(TT* A, TT* TransA);
-    template <typename TT> void Ortho2TransT(TT* A, TT* TransA);
+    template <typename TT> void Ortho2TransT(TT* A, TT* TransA);//This one is added by Jiace
 
 
     // SCF procedural functions (see include/singleslater/scf.hpp for docs)
@@ -279,11 +279,13 @@ namespace ChronusQ {
     void scfDIIS(size_t);
 
 
-	void swaporbit(bool, bool, std::pair<int,int>, std::pair<int,int>);
-	void readpdm();
-	void savenpy(std::string);
     // MO Transformations
     void MOFOCK();
+
+
+	void swaporbit(bool, bool, std::pair<int,int>, std::pair<int,int>);//Added by Jiace
+	void readpdm();//Added by Jiace
+	void savenpy(std::string);//Added by Jiace
 
   }; // class SingleSlater
 

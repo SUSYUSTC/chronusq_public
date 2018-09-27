@@ -153,8 +153,10 @@ namespace ChronusQ {
 
   private:
   public:
+	//Added by Jiace, for the debugging settings
 	size_t DebugLevel;
 	size_t DebugDepth=0;
+	//Added by Jiace, when save_time%save_step==0 and save_status=true, Density Matrix and Fock Matrix will be saved
 	bool save_status=false;
 	size_t save_time=0;
 	size_t save_step;

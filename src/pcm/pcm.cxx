@@ -47,49 +47,6 @@ namespace ChronusQ
 		os << "Number of grids:\t" << pcmbase.grid_size << std::endl;
 		os << "Number of basis:\t" << pcmbase.nB << std::endl;
 		os << "Save data every " << pcmbase.savestep << " steps" << std::endl;
-		/*
-		if (pcmbase.grid.size()!=0 && pcmbase.surc.size()!=0)
-		{
-			os << "Coordinates of grids and surface charge:" << std::endl;
-			for(int i=0;i!=pcmbase.grid_size;++i)
-			{
-				os << pcmbase.grid.col(i);
-				os << pcmbase.surc[i];
-				os << std::endl;
-			}
-		}
-		else if (pcmbase.grid.size()!=0)
-		{
-			os << "Surface charge has not been calculated" << std::endl;
-			os << "Coordinates of grids:" << std::endl;
-			os << pcmbase.grid.transpose() << std::endl;
-		}
-		else if (pcmbase.surc.size()!=0)
-		{
-			std::cerr << "Hey stupid guy, your program curshes" << std::endl;
-		}
-		else
-		{
-			os << "Grids are not calculated" << std::endl;
-		}
-		static bool is_pcmstore_printed=false;
-		if (pcmbase.ints.size()!=0 and not is_pcmstore_printed)
-		{
-			os << "Saving information of integrations to pcmint.npy" << std::endl;
-			std::vector<size_t> size={size_t(pcmbase.grid_size),pcmbase.nB,pcmbase.nB};
-			cnpy::npy_save("pcmint.npy",pcmbase.ints.data(),size,"w");
-			os << "Saving finished" << std::endl;
-			is_pcmstore_printed=true;
-		}
-		else if(is_pcmstore_printed)
-		{
-			os << "Information of integrations is stored, won't store again" << std::endl;
-		}
-		else
-		{
-			os << "Information of integrations will be calculated each step" << std::endl;
-		}
-		*/
 		return os;
 	}
 	PCMBase::PCMBase()
@@ -100,6 +57,7 @@ namespace ChronusQ
 	{
 		try
 		{
+			//All of these must be specified
 			double area=input.getData<double>("PCM.AREA");
 			std::string solver_type=input.getData<std::string>("PCM.SOLVER_TYPE");
 			std::string solvent=input.getData<std::string>("PCM.SOLVENT");
@@ -109,6 +67,7 @@ namespace ChronusQ
 			this->host_input.area=area;
 			std::strcpy(this->host_input.solver_type,solver_type.c_str());
 			std::strcpy(this->host_input.solvent,solvent.c_str());
+			//The following four keywords is fixed
 			std::strcpy(this->host_input.cavity_type, "Gepol");
 			std::strcpy(this->host_input.radii_set, "UFF");
 			std::strcpy(this->host_input.inside_type, "Vacuum");
@@ -125,7 +84,7 @@ namespace ChronusQ
 			this->use_PCM=false;
 		}
 	}
-	//determine num of grids and locations of grids
+	//determine num of grids, locations of grids and the matrix from surface potential to surface charge
 	void PCMBase::initialize(CQMemManager& mem,const Molecule& molecule)
 	{
 		int nAtoms=molecule.nAtoms;
@@ -163,9 +122,11 @@ namespace ChronusQ
 		Eigen::Matrix3Xd grid_angstrom=grid*0.52917721067;
 		cnpy::npy_save("grid.npy",grid_angstrom.data(),npy_size,"w");
 	}
+	//perb is not used
 	double* PCMBase::PointFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset, std::array<double,3>& center)
 	{
 		//std::cout << "PointFock started, ";
+		//set the charge to 1
 		Atom atom("H",center);
 		atom.atomicNumber=1;
 		std::vector<Atom> atoms(1);
@@ -191,7 +152,7 @@ namespace ChronusQ
 	{
 		return vec.real();
 	}
-	//input surface potential, store surface charge inside
+	//input surface potential, store surface charge inside pcmbase
 	void PCMBase::formcharge()//surface potential
 	{
 		pcmsolver_set_surface_function(this->pcm_context, this->grid_size, this->surp.data(), "mep");
@@ -228,7 +189,6 @@ namespace ChronusQ
 		cnpy::npy_save("pcmints.npy",this->ints,npy_size,"w");
 		this->is_stored=true;
 	}
-	//TODO :optimize this part and make it parallel
 	//If Fock matrix is stored, sum them up, else sum up one by one
 	void PCMBase::formFock(CQMemManager& mem, EMPerturbation& perb, BasisSet& basisset)
 	{

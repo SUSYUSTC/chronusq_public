@@ -65,6 +65,7 @@ namespace ChronusQ {
 
     size_t NB = propagator_.aoints.basisSet().nBasis;
 
+	//The condition is modified by Jiace
     for( curState.xTime = 0., curState.iStep = 0; 
          curState.xTime <= (intScheme.tMax + intScheme.deltaT/4); 
 		 curState.iStep++ ) {
@@ -74,6 +75,8 @@ namespace ChronusQ {
 
 
 
+	  //Modified by Jiace
+	  //The following is the old code(e.g. use two Forward Euler when starting)
 /*
 
 #if 1
@@ -116,6 +119,7 @@ namespace ChronusQ {
 */
 
 
+	  //variable start_time is the corresponding value of keyword RT.START, see its explanation in comment.txt
 	  if (curState.iStep%intScheme.iRstrt==0 or curState.iStep<this->start_time)
 	  {
 		  if(propagator_.DebugLevel>=1)
@@ -235,18 +239,20 @@ namespace ChronusQ {
   }
   template <template <typename, typename> class _SSTyp, typename IntsT>
   void RealTime<_SSTyp,IntsT>::DoStart(EMPerturbation& pert_t) {
+	  //The first step is a forward euler with time step 0.5**scaling_first
 	  curState.curStep=ForwardEuler;
 	  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first);
-	  //Modify Save to current DM
 	  for(auto i = 0; i < DOSav.size(); i++)
+		  //Copy onePDMOrtho to DOSav
 		  std::copy_n(propagator_.onePDMOrtho[i],
 				  memManager_.template getSize<dcomplex>(DOSav[i]),
 				  DOSav[i]);
 	  this->DoIteration(pert_t, true);
+	  //Then do scaling_first times of MMUT
 	  for(size_t i=1;i<=scaling_first;++i)
 	  {
 		  curState.stepSize=intScheme.deltaT*pow(0.5,scaling_first-i);
-		  //Modify current DM to Save
+		  //Copy DOSav to onePDMOrtho
 		  for(auto i = 0; i < DOSav.size(); i++)
 			  std::copy_n(DOSav[i],
 					  memManager_.template getSize<dcomplex>(DOSav[i]),
