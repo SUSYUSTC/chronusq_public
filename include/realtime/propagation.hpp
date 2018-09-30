@@ -167,6 +167,8 @@ namespace ChronusQ {
 	  {
       // Compute properties for D(k) 
 		  propagator_.computeProperties(pert_t);
+		  if(propagator_.pcm!=nullptr and propagator_.pcm->use_PCM)
+			  propagator_.totalEnergy+=propagator_.pcm->computeEnergy();
 
 		  data.Time.push_back(curState.xTime);
 		  data.Energy.push_back(propagator_.totalEnergy);
